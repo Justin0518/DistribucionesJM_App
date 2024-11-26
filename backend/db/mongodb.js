@@ -1,10 +1,17 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-mongoose.connection.on('open', () => console.log('db connected'))
-
-async function connectDb ({ host, port, dbName }) {
-  const uri = `mongodb://${host}:${port}/${dbName}`
-  await mongoose.connect(uri, { useNewUrlParser: true })
+// Función para conectar con MongoDB Atlas
+async function connectDb(uri) {
+  try {
+    await mongoose.connect(uri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log('Conexión exitosa a la base de datos');
+  } catch (error) {
+    console.error('Error al conectar con la base de datos:', error);
+    throw error;
+  }
 }
 
-module.exports = connectDb
+module.exports = connectDb;

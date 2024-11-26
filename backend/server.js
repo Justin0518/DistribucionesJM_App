@@ -1,16 +1,21 @@
-require('dotenv').config()
-const app = require('./app')
-const connectDb = require('./db/mongodb')
-const { appConfig, dbConfig } = require('./config')
+require('dotenv').config();
+const app = require('./app');
+const connectDb = require('./db/mongodb');
+const { appConfig, dbConfig } = require('./config');
 
-async function initApp (appConfig, dbConfig) {
+// Función para inicializar la aplicación
+async function initApp(appConfig, dbConfig) {
   try {
-    await connectDb(dbConfig)
-    app.listen(appConfig.port, () => console.log(`listen on ${appConfig.port}`))
-  } catch (e) {
-    console.error(e)
-    process.exit(0)
+    // Conexión a MongoDB Atlas
+    await connectDb(dbConfig.uri);
+    // Inicio del servidor
+    app.listen(appConfig.port, () =>
+      console.log(`Servidor escuchando en el puerto ${appConfig.port}`)
+    );
+  } catch (error) {
+    console.error('Error al iniciar la aplicación:', error);
+    process.exit(1);
   }
 }
 
-initApp(appConfig, dbConfig)
+initApp(appConfig, dbConfig);
