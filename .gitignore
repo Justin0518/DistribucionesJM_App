@@ -1,0 +1,32 @@
+# Node.js y Express
+node_modules/
+.env
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Directorios y archivos de Flutter
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/ios/.generated/
+**/android/.gradle/
+**/android/app/src/debug/
+
+# Archivos generados por VS Code o IDEs
+.vscode/
+.idea/
+*.iml
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Configuración de Render o servicios similares
+render.yaml
+.vercel/
+.render/
