@@ -4,6 +4,8 @@ import 'package:jm_app/Admin/adminNavegar.dart';
 import 'dart:convert';
 import 'package:jm_app/Cliente/navegar.dart';
 
+const String baseUrl = 'https://distribucionesjm-app.onrender.com';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -21,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       isLoading = true;
     });
-    final url = Uri.parse('http://192.168.1.95:8081/clientes/login'); // URL del backend para autenticar cliente
+    final url = Uri.parse('$baseUrl/clientes/login'); // URL del backend para autenticar cliente
 
     try {
       final response = await http.post(
@@ -70,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
     isLoading = true;
   });
   
-  final url = Uri.parse('http://192.168.1.95:8081/admin/login'); // Endpoint para administradores
+  final url = Uri.parse('$baseUrl/admin/login'); // Endpoint para administradores
 
   try {
     final response = await http.post(

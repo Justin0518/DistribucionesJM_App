@@ -7,6 +7,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jm_app/login.dart';
 
+const String baseUrl = 'https://distribucionesjm-app.onrender.com';
+
 class AdminNavegar extends StatefulWidget {
   @override
   _AdminNavegarState createState() => _AdminNavegarState();
@@ -27,7 +29,7 @@ class _AdminNavegarState extends State<AdminNavegar> {
 
   Future<void> verificarNuevosPedidos() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.95:8081/pedidos/recibido'));
+      final response = await http.get(Uri.parse('$baseUrl/pedidos/recibido'));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -67,7 +69,7 @@ class _AdminNavegarState extends State<AdminNavegar> {
   Future<void> marcarPedidosComoVistos() async {
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.1.95:8081/pedidos/marcar'),
+        Uri.parse('$baseUrl/pedidos/marcar'),
         headers: {'Content-Type': 'application/json'},
       );
 

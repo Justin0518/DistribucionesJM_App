@@ -6,6 +6,10 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Necesario para el formato de fechas
 
+
+const String baseUrl = 'https://distribucionesjm-app.onrender.com';
+
+
 class Informes extends StatefulWidget {
   
   @override
@@ -265,7 +269,7 @@ class _InformeVentasTotalesState extends State<InformeVentasTotales> {
           : '2024-12-31'; // Fecha predeterminada si no se selecciona
 
       final response = await http.get(
-        Uri.parse('http://192.168.1.95:8081/informes/ventas-totales?fechaInicio=$fechaInicio&fechaFin=$fechaFin'),
+        Uri.parse('$baseUrl/informes/ventas-totales?fechaInicio=$fechaInicio&fechaFin=$fechaFin'),
       );
 
       if (response.statusCode == 200) {
@@ -401,7 +405,7 @@ class _InformeProductosMasVendidosState extends State<InformeProductosMasVendido
 
       final response = await http.get(
         Uri.parse(
-          'http://192.168.1.95:8081/informes/productos-mas-vendidos?fechaInicio=$fechaInicio&fechaFin=$fechaFin',
+          '$baseUrl/informes/productos-mas-vendidos?fechaInicio=$fechaInicio&fechaFin=$fechaFin',
         ),
       );
 
@@ -521,7 +525,7 @@ class _InformeClientesActivosState extends State<InformeClientesActivos> {
 
       final response = await http.get(
         Uri.parse(
-          'http://192.168.1.95:8081/informes/clientes-activos?fechaInicio=$fechaInicio&fechaFin=$fechaFin',
+          '$baseUrl/informes/clientes-activos?fechaInicio=$fechaInicio&fechaFin=$fechaFin',
         ),
       );
 

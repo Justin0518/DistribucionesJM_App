@@ -3,6 +3,10 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
+
+const String baseUrl = 'https://distribucionesjm-app.onrender.com';
+
+
 class Clientes extends StatefulWidget {
   @override
   _ClientesState createState() => _ClientesState();
@@ -36,7 +40,7 @@ class _ClientesState extends State<Clientes> {
   // Función para obtener clientes del backend
   Future<void> fetchClientes() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.95:8081/clientes/'));
+      final response = await http.get(Uri.parse('$baseUrl/clientes/'));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
@@ -82,7 +86,7 @@ class _ClientesState extends State<Clientes> {
   // Función para eliminar cliente del backend
   Future<void> eliminarCliente(String clienteId) async {
     try {
-      final response = await http.delete(Uri.parse('http://192.168.1.95:8081/clientes/$clienteId'));
+      final response = await http.delete(Uri.parse('$baseUrl/clientes/$clienteId'));
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -247,7 +251,7 @@ class _DetalleClienteState extends State<DetalleCliente> {
   Future<void> fetchDetalleCliente() async {
     final clienteId = widget.clienteId;
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.95:8081/clientes/$clienteId'));
+      final response = await http.get(Uri.parse('$baseUrl/clientes/$clienteId'));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -418,7 +422,7 @@ class _AgregarClienteState extends State<AgregarCliente> {
 
   // Función para enviar los datos al backend y agregar el cliente
   Future<void> agregarCliente() async {
-    final url = Uri.parse('http://192.168.1.95:8081/clientes/agregar'); // Reemplaza con tu URL del backend
+    final url = Uri.parse('$baseUrl/clientes/agregar'); // Reemplaza con tu URL del backend
 
     final body = json.encode({
       "_id": "C${DateTime.now().millisecondsSinceEpoch}", // Generar un ID temporal único

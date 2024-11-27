@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert'; 
 import 'package:intl/intl.dart';
 
+const String baseUrl = 'https://distribucionesjm-app.onrender.com';
+
 class Pedidos extends StatefulWidget {
   final String clienteId; 
 
@@ -29,7 +31,7 @@ class _PedidosState extends State<Pedidos> {
   // Función para obtener los pedidos del cliente desde el backend
   Future<void> fetchPedidos() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.95:8081/pedidos/cliente/${widget.clienteId}'));
+      final response = await http.get(Uri.parse('$baseUrl/pedidos/cliente/${widget.clienteId}'));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
@@ -357,7 +359,7 @@ class _DetallePedidoClienteState extends State<DetallePedidoCliente> {
   // Función para obtener los detalles del pedido desde el backend
   Future<void> fetchDetallePedido() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.95:8081/pedidos/${widget.pedidoId}'));
+      final response = await http.get(Uri.parse('$baseUrl/pedidos/${widget.pedidoId}'));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {

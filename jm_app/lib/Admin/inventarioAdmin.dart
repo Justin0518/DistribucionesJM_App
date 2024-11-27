@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jm_app/login.dart';
 
+const String baseUrl = 'https://distribucionesjm-app.onrender.com';
 
 class InventarioAdmin extends StatefulWidget {
 
@@ -24,7 +25,7 @@ class _InventarioState extends State<InventarioAdmin> {
 
   Future<void> fetchProductos() async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.95:8081/v1/products/'));
+      final response = await http.get(Uri.parse('$baseUrl/v1/products/'));
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
@@ -55,7 +56,7 @@ class _InventarioState extends State<InventarioAdmin> {
   Future<void> updateProducto(String id, bool nuevoEstado) async {
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.1.95:8081/v1/products/$id'),
+        Uri.parse('$baseUrl/v1/products/$id'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -488,7 +489,7 @@ class _AgregarProductoState extends State<AgregarProducto> {
   }
 
   Future<void> fetchCategorias() async {
-    final response = await http.get(Uri.parse('http://192.168.1.95:8081/categorias/'));
+    final response = await http.get(Uri.parse('$baseUrl/categorias/'));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       setState(() {
@@ -506,7 +507,7 @@ class _AgregarProductoState extends State<AgregarProducto> {
   }
 
   Future<void> fetchSubcategorias(String categoriaId) async {
-    final response = await http.get(Uri.parse('http://192.168.1.95:8081/subcategorias/$categoriaId'));
+    final response = await http.get(Uri.parse('$baseUrl/subcategorias/$categoriaId'));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       setState(() {
@@ -538,7 +539,7 @@ class _AgregarProductoState extends State<AgregarProducto> {
       // Crear la solicitud multipart para enviar datos junto con la imagen
       var request = http.MultipartRequest(
         'POST', 
-        Uri.parse('http://192.168.1.95:8081/v1/products')
+        Uri.parse('$baseUrl/v1/products')
       );
 
       // Agregar los campos de texto
@@ -876,7 +877,7 @@ class _DetalleProductoState extends State<DetallesProducto> {
   // Función para obtener los detalles del producto desde la base de datos
   Future<void> fetchProducto(String id) async {
     try {
-      final response = await http.get(Uri.parse('http://192.168.1.95:8081/v1/products/$id'));
+      final response = await http.get(Uri.parse('$baseUrl/v1/products/$id'));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -918,7 +919,7 @@ class _DetalleProductoState extends State<DetallesProducto> {
   }
 
   Future<void> fetchCategorias() async {
-    final response = await http.get(Uri.parse('http://192.168.1.95:8081/categorias/'));
+    final response = await http.get(Uri.parse('$baseUrl/categorias/'));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       setState(() {
@@ -935,7 +936,7 @@ class _DetalleProductoState extends State<DetallesProducto> {
   }
 
   Future<void> fetchSubcategorias(String categoriaId) async {
-    final response = await http.get(Uri.parse('http://192.168.1.95:8081/subcategorias/$categoriaId'));
+    final response = await http.get(Uri.parse('$baseUrl/subcategorias/$categoriaId'));
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       setState(() {
@@ -956,7 +957,7 @@ class _DetalleProductoState extends State<DetallesProducto> {
     try {
       var request = http.MultipartRequest(
         'PUT',
-        Uri.parse('http://192.168.1.95:8081/v1/products/${widget.productId}'),
+        Uri.parse('$baseUrl/v1/products/${widget.productId}'),
       );
 
       // Agregar los campos de texto
@@ -1013,7 +1014,7 @@ class _DetalleProductoState extends State<DetallesProducto> {
   Future<void> eliminarProducto() async {
     try {
       final response = await http.delete(
-        Uri.parse('http://192.168.1.95:8081/v1/products/${widget.productId}'),
+        Uri.parse('$baseUrl/v1/products/${widget.productId}'),
       );
 
       if (response.statusCode == 200) {
