@@ -61,8 +61,9 @@ async function addProduct (req, res) {
     // Verificar si hay un archivo de imagen en la solicitud
     if (req.file) {
       const { filename } = req.file;
-      product.imgUrl = `/uploads/${filename}`; // Guardar la URL de la imagen en el producto
+      product.imgUrl = `https://distribucionesjm-app.onrender.com/public/${filename}`; // Guardar la URL completa de la imagen
     }
+    
         // Verificar si el producto ya existe
     const productoExistente = await Product.findOne({ nombreProducto });
     if (productoExistente) {

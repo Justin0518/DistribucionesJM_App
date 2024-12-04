@@ -16,9 +16,10 @@ const ProductSchema = Schema({
 }, {
 })
 
-ProductSchema.methods.setImgUrl = function setImgUrl (filename) {
-  const { host, port } = appConfig
-  this.imgUrl = `${host}:${port}/public/${filename}`
-}
+ProductSchema.methods.setImgUrl = function setImgUrl(filename) {
+  const baseUrl = 'https://distribucionesjm-app.onrender.com'; // Base URL del servidor desplegado
+  this.imgUrl = `${baseUrl}/public/${filename}`;
+};
+
 
 module.exports = mongoose.model('Products', ProductSchema)
