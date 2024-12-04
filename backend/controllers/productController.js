@@ -58,9 +58,10 @@ async function addProduct (req, res) {
         descripcion
     });
 
+    // Verificar si hay un archivo de imagen en la solicitud
     if (req.file) {
       const { filename } = req.file;
-      product.setImgUrl(filename);
+      product.imgUrl = `/uploads/${filename}`; // Guardar la URL de la imagen en el producto
     }
         // Verificar si el producto ya existe
     const productoExistente = await Product.findOne({ nombreProducto });

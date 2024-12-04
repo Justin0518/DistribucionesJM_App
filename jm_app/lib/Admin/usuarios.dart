@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 const String baseUrl = 'https://distribucionesjm-app.onrender.com';
@@ -106,15 +107,17 @@ class _ClientesState extends State<Clientes> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
+        title: Text(
           'Clientes',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -123,26 +126,26 @@ class _ClientesState extends State<Clientes> {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(20.h), // Espaciado responsivo
               child: Column(
                 children: [
                   // Barra de búsqueda
                   Container(
-                    height: 40,
+                    height: 30.h,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: Color(0xFFE4E4E4)),
+                      borderRadius: BorderRadius.circular(30.r), // Bordes redondeados responsivos
+                      border: Border.all(color: const Color(0xFFE4E4E4)),
                     ),
                     child: TextField(
                       onChanged: (value) {
@@ -151,14 +154,14 @@ class _ClientesState extends State<Clientes> {
                       textAlign: TextAlign.left,
                       decoration: InputDecoration(
                         hintText: 'Buscar cliente',
-                        hintStyle: TextStyle(color: Color(0xFFB0B0B0)),
-                        suffixIcon: Icon(Icons.search, color: Color(0xFF828282)),
+                        hintStyle: TextStyle(color: const Color(0xFFB0B0B0), fontSize: 12.sp), // Fuente responsiva
+                        suffixIcon: Icon(Icons.search, color: const Color(0xFF828282), size: 20.w), // Ícono responsivo
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                        contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 25.w), // Padding interno responsivo
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h), // Espaciado responsivo
 
                   // Lista de clientes filtrados
                   Expanded(
@@ -167,30 +170,32 @@ class _ClientesState extends State<Clientes> {
                       itemBuilder: (context, index) {
                         final cliente = clientesFiltrados[index];
                         return Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
+                          padding: EdgeInsets.only(bottom: 10.h), // Espaciado responsivo entre tarjetas
                           child: Card(
                             elevation: 4,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10.r), // Bordes redondeados responsivos
                             ),
                             child: ListTile(
+                              contentPadding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 20.w), // Padding interno responsivo
                               leading: CircleAvatar(
                                 backgroundColor: Colors.redAccent,
-                                child: Icon(Icons.person, color: Colors.white),
+                                radius: 20.r, // Tamaño responsivo
+                                child: Icon(Icons.person, color: Colors.white, size: 20.sp), // Ícono responsivo
                               ),
                               title: Text(
                                 cliente['nombre'],
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14.sp, // Fuente responsiva
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               subtitle: Text(
                                 cliente['email'],
-                                style: TextStyle(fontSize: 14, color: Colors.grey),
+                                style: TextStyle(fontSize: 12.sp, color: Colors.grey), // Fuente responsiva
                               ),
                               trailing: IconButton(
-                                icon: Icon(Icons.delete, color: Colors.red),
+                                icon: Icon(Icons.delete, color: Colors.red, size: 20.w), // Ícono responsivo
                                 onPressed: () {
                                   eliminarCliente(cliente['_id']);
                                 },
@@ -215,8 +220,10 @@ class _ClientesState extends State<Clientes> {
       floatingActionButton: FloatingActionButton(
         onPressed: _agregarCliente,
         backgroundColor: Colors.red,
-        child: Icon(Icons.add, color: Colors.white),
+        child: Icon(Icons.add, color: Colors.white, size: 20.w), // Ícono responsivo
       ),
+
+    ),
     );
   }
 }
@@ -273,7 +280,9 @@ class _DetalleClienteState extends State<DetalleCliente> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
@@ -282,11 +291,11 @@ class _DetalleClienteState extends State<DetalleCliente> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Detalle del Cliente',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 16.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -295,103 +304,118 @@ class _DetalleClienteState extends State<DetalleCliente> {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(40.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Datos del cliente
-                  Text(
-                    'Nombre: ${cliente['nombres']} ${cliente['apellidos']}',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Email: ${cliente['email']}',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Teléfono: ${cliente['telefono']}',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                  ),
-                  const SizedBox(height: 20),
+body: isLoading
+    ? Center(child: CircularProgressIndicator())
+    : Padding(
+        padding: EdgeInsets.all(40.w), // Espaciado responsivo
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Datos del cliente
+            Text(
+              'Nombre: ${cliente['nombres']} ${cliente['apellidos']}',
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold), // Fuente responsiva
+            ),
+            SizedBox(height: 10.h), // Espaciado responsivo
+            Text(
+              'Email: ${cliente['email']}',
+              style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]), // Fuente responsiva
+            ),
+            SizedBox(height: 10.h),
+            Text(
+              'Teléfono: ${cliente['telefono']}',
+              style: TextStyle(fontSize: 14.sp, color: Colors.grey[700]), // Fuente responsiva
+            ),
+            SizedBox(height: 20.h),
 
-                  // Historial de compras
-                  Text(
-                    'Historial de Compras',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
-                  ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: historialCompras.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: historialCompras.length,
-                            itemBuilder: (context, index) {
-                              final compra = historialCompras[index];
-                              return Card(
-                                elevation: 3,
-                                child: ExpansionTile(
-                                  title: Text(
-                                    'Fecha de compra: ${compra['fechaCompra'].substring(0, 10)}',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+            // Historial de compras
+            Text(
+              'Historial de Compras',
+              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.red), // Fuente responsiva
+            ),
+            SizedBox(height: 10.h),
+
+            Expanded(
+              child: historialCompras.isNotEmpty
+                  ? ListView.builder(
+                      itemCount: historialCompras.length,
+                      itemBuilder: (context, index) {
+                        final compra = historialCompras[index];
+                        return Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r), // Bordes redondeados responsivos
+                          ),
+                          child: ExpansionTile(
+                            title: Text(
+                              'Fecha de compra: ${compra['fechaCompra'].substring(0, 10)}',
+                              style: TextStyle(
+                                fontSize: 14.sp, // Fuente responsiva
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(), // Evitar conflicto de scrolls
+                                itemCount: compra['productos'].length,
+                                itemBuilder: (context, prodIndex) {
+                                  final producto = compra['productos'][prodIndex];
+                                  return ListTile(
+                                    title: Text(
+                                      producto['nombre'],
+                                      style: TextStyle(fontSize: 14.sp), // Fuente responsiva
                                     ),
-                                  ),
-                                  children: [
-                                    ListView.builder(
-                                      shrinkWrap: true,
-                                      physics: NeverScrollableScrollPhysics(), // Evitar conflicto de scrolls
-                                      itemCount: compra['productos'].length,
-                                      itemBuilder: (context, prodIndex) {
-                                        final producto = compra['productos'][prodIndex];
-                                        return ListTile(
-                                          title: Text(producto['nombre']),
-                                          subtitle: Text('Cantidad: ${producto['cantidad']}'),
-                                          trailing: Text(
-                                            '\$${formatPrice(producto['subtotal'])}',
-                                            style: TextStyle(fontWeight: FontWeight.bold),
-                                          ),
-                                        );
-                                      },
+                                    subtitle: Text(
+                                      'Cantidad: ${producto['cantidad']}',
+                                      style: TextStyle(fontSize: 12.sp), // Fuente responsiva
                                     ),
-                                    const SizedBox(height: 10),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        'Total: \$${formatPrice(compra['total'])}',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.red,
-                                        ),
+                                    trailing: Text(
+                                      '\$${formatPrice(producto['subtotal'])}',
+                                      style: TextStyle(
+                                        fontSize: 14.sp, // Fuente responsiva
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                  ],
+                                  );
+                                },
+                              ),
+                              SizedBox(height: 10.h),
+                              Padding(
+                                padding: EdgeInsets.all(8.w), // Espaciado responsivo
+                                child: Text(
+                                  'Total: \$${formatPrice(compra['total'])}',
+                                  style: TextStyle(
+                                    fontSize: 14.sp, // Fuente responsiva
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.red,
+                                  ),
                                 ),
-                              );
-                            },
-                          )
-                        : Center(
-                            child: Text(
-                              'No hay historial de compras',
-                              style: TextStyle(fontSize: 16, color: Colors.grey),
-                            ),
+                              ),
+                            ],
                           ),
-                  ),
-                ],
-              ),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Text(
+                        'No hay historial de compras',
+                        style: TextStyle(fontSize: 14.sp, color: Colors.grey), // Fuente responsiva
+                      ),
+                    ),
             ),
+          ],
+        ),
+      ),
+
+    ),
     );
   }
 }
@@ -478,7 +502,9 @@ class _AgregarClienteState extends State<AgregarCliente> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Color(0xFF828282)),
@@ -486,11 +512,11 @@ class _AgregarClienteState extends State<AgregarCliente> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Agregar Cliente',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -499,27 +525,31 @@ class _AgregarClienteState extends State<AgregarCliente> {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(40.0),
+        padding: EdgeInsets.all(40.w), // Espaciado responsivo
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Campo: Nombres
               TextFormField(
                 controller: nombreController,
                 decoration: InputDecoration(
                   labelText: 'Nombres',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(fontSize: 14.sp), // Fuente responsiva
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r), // Bordes redondeados responsivos
+                  ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w), // Borde responsivo
                   ),
                 ),
                 validator: (value) {
@@ -529,14 +559,19 @@ class _AgregarClienteState extends State<AgregarCliente> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h), // Espaciado responsivo
+
+              // Campo: Apellidos
               TextFormField(
                 controller: apellidoController,
                 decoration: InputDecoration(
                   labelText: 'Apellidos',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(fontSize: 14.sp),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 validator: (value) {
@@ -546,14 +581,19 @@ class _AgregarClienteState extends State<AgregarCliente> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
+
+              // Campo: Teléfono
               TextFormField(
                 controller: telefonoController,
                 decoration: InputDecoration(
                   labelText: 'Número de Teléfono',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(fontSize: 14.sp),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 keyboardType: TextInputType.phone,
@@ -568,14 +608,19 @@ class _AgregarClienteState extends State<AgregarCliente> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
+
+              // Campo: Correo Electrónico
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Correo Electrónico',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(fontSize: 14.sp),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 keyboardType: TextInputType.emailAddress,
@@ -588,14 +633,19 @@ class _AgregarClienteState extends State<AgregarCliente> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
+
+              // Campo: Confirmar Correo Electrónico
               TextFormField(
                 controller: confirmarEmailController,
                 decoration: InputDecoration(
                   labelText: 'Confirmar Correo Electrónico',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(fontSize: 14.sp),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 keyboardType: TextInputType.emailAddress,
@@ -606,14 +656,19 @@ class _AgregarClienteState extends State<AgregarCliente> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
+
+              // Campo: Contraseña
               TextFormField(
                 controller: passwordController,
                 decoration: InputDecoration(
                   labelText: 'Contraseña',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(fontSize: 14.sp),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 obscureText: true,
@@ -626,14 +681,19 @@ class _AgregarClienteState extends State<AgregarCliente> {
                   return null;
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
+
+              // Campo: Confirmar Contraseña
               TextFormField(
                 controller: confirmarPasswordController,
                 decoration: InputDecoration(
                   labelText: 'Confirmar Contraseña',
-                  border: OutlineInputBorder(),
+                  labelStyle: TextStyle(fontSize: 14.sp),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 obscureText: true,
@@ -644,7 +704,9 @@ class _AgregarClienteState extends State<AgregarCliente> {
                   return null;
                 },
               ),
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
+
+              // Botón: Agregar Cliente
               Center(
                 child: ElevatedButton(
                   onPressed: () {
@@ -655,14 +717,16 @@ class _AgregarClienteState extends State<AgregarCliente> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r), // Bordes redondeados responsivos
                     ),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 40),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 15.h, // Padding vertical responsivo
+                      horizontal: 40.w, // Padding horizontal responsivo
+                    ),
                   ),
                   child: Text(
                     'Agregar Cliente',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white, fontSize: 14.sp), // Fuente responsiva
                   ),
                 ),
               ),
@@ -670,6 +734,8 @@ class _AgregarClienteState extends State<AgregarCliente> {
           ),
         ),
       ),
+
+    ),
     );
   }
 }

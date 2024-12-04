@@ -6,6 +6,7 @@ import 'package:jm_app/Admin/informes.dart';   // Informes
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jm_app/login.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const String baseUrl = 'https://distribucionesjm-app.onrender.com';
 
@@ -87,170 +88,174 @@ class _AdminNavegarState extends State<AdminNavegar> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey, // Asignamos la key al Scaffold
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Container(
-              height: 200,
-              child: Stack(
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xff000000), Color(0xff434343)],
-                      stops: [0, 1],
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.topCenter,
-                    )
-                    ),
-                  ),
-                  Positioned(
-                    top: -85,
-                    left: -112,
-                    child: Container(
-                      width: 280,
-                      height: 170,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+    return ScreenUtilInit(
+      designSize: Size(360, 690),
+      builder: (context, child) => Scaffold(
+        key: _scaffoldKey, // Asignamos la key al Scaffold
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              Container(
+                height: 200.h,
+                child: Stack(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
                         gradient: LinearGradient(
-                          colors: [
-                            Color(0xFFFF2B109).withOpacity(0.89),
-                            Color(0xFFE2590B).withOpacity(0.89),
-                            Color(0xFFFF20909).withOpacity(0.89),
-                          ],
-                          stops: [0.5, 0.61, 0.81],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
+                          colors: [Color(0xff000000), Color(0xff434343)],
+                          stops: [0, 1],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
                         ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    top: 70, // Ajusta el valor de top para centrar verticalmente
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        height: 80, // Ajusta el tamaño del logo
+                    Positioned(
+                      top: -85.h,
+                      left: -112.w,
+                      child: Container(
+                        width: 280.w,
+                        height: 170.h,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xFFFF2B109).withOpacity(0.89),
+                              Color(0xFFE2590B).withOpacity(0.89),
+                              Color(0xFFFF20909).withOpacity(0.89),
+                            ],
+                            stops: [0.5, 0.61, 0.81],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                    Positioned(
+                      top: 70.h,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          height: 80.h,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            ListTile(
-              leading: Icon(Icons.inventory),
-              title: Text('Inventario'),
-              onTap: () {
-                Navigator.pop(context);
-                _onItemTapped(0);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.assignment),
-              title: Text('Pedidos'),
-              onTap: () {
-                Navigator.pop(context);
-                _onItemTapped(1);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.list_alt_rounded),
-              title: Text('Informes'),
-              onTap: () {
-                Navigator.pop(context);
-                _onItemTapped(2);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.people),
-              title: Text('Clientes'),
-              onTap: () {
-                Navigator.pop(context);
-                _onItemTapped(3);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Cerrar sesión'),
-              onTap: () {
-                Navigator.pop(context);
-                _cerrarSesion();
-              },
-            ),
-          ],
-        ),
-      ),
-      body: PageView(
-        controller: _pageController,
-        onPageChanged: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        children: [
-          InventarioAdmin(openDrawer: _openDrawer),
-          PedidosAdmin(),
-          Informes(),
-          Clientes(),
-        ],
-        physics: NeverScrollableScrollPhysics(),
-      ),
-      bottomNavigationBar: Container(
-        height: 80,
-        decoration: const BoxDecoration(
-          color: Color(0xFFFFFFFF),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 5,
-              spreadRadius: 1,
-            ),
-          ],
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+              SizedBox(height: 15.h),
+              ListTile(
+                leading: Icon(Icons.inventory),
+                title: Text('Inventario', style: TextStyle(fontSize: 12.sp)),
+                onTap: () {
+                  Navigator.pop(context);
+                  _onItemTapped(0);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.assignment),
+                title: Text('Pedidos', style: TextStyle(fontSize: 12.sp)),
+                onTap: () {
+                  Navigator.pop(context);
+                  _onItemTapped(1);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.list_alt_rounded),
+                title: Text('Informes', style: TextStyle(fontSize: 12.sp)),
+                onTap: () {
+                  Navigator.pop(context);
+                  _onItemTapped(2);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.people),
+                title: Text('Clientes', style: TextStyle(fontSize: 12.sp)),
+                onTap: () {
+                  Navigator.pop(context);
+                  _onItemTapped(3);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.exit_to_app),
+                title: Text('Cerrar sesión', style: TextStyle(fontSize: 12.sp)),
+                onTap: () {
+                  Navigator.pop(context);
+                  _cerrarSesion();
+                },
+              ),
+            ],
           ),
         ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          selectedItemColor: Colors.red,
-          unselectedItemColor: Color(0xFF828282),
-          showUnselectedLabels: true,
-          selectedLabelStyle: const TextStyle(fontSize: 16),
-          unselectedLabelStyle: const TextStyle(fontSize: 14),
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.inventory), label: 'Inventario'),
-            BottomNavigationBarItem(
-              icon: Stack(
-                children: [
-                  Icon(Icons.assignment), // Ícono de pedidos
-                  if (hayNuevoPedido) // Mostrar la notificación si hay nuevos pedidos
-                    Positioned(
-                      right: 0,
-                      child: Container(
-                        padding: EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          color: Colors.red,
-                          shape: BoxShape.circle,
+        body: PageView(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          children: [
+            InventarioAdmin(openDrawer: _openDrawer),
+            PedidosAdmin(),
+            Informes(),
+            Clientes(),
+          ],
+          physics: NeverScrollableScrollPhysics(),
+        ),
+        bottomNavigationBar: Container(
+          height: 60.h,
+          decoration: const BoxDecoration(
+            color: Color(0xFFFFFFFF),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 5,
+                spreadRadius: 1,
+              ),
+            ],
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          child: BottomNavigationBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            selectedItemColor: Colors.red,
+            unselectedItemColor: Color(0xFF828282),
+            showUnselectedLabels: true,
+            selectedLabelStyle: TextStyle(fontSize: 12.sp),
+            unselectedLabelStyle: TextStyle(fontSize: 12.sp),
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(icon: Icon(Icons.inventory, size: 22.w), label: 'Inventario'),
+              BottomNavigationBarItem(
+                icon: Stack(
+                  children: [
+                    Icon(Icons.assignment, size: 22.w),
+                    if (hayNuevoPedido)
+                      Positioned(
+                        right: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(4.w),
+                          decoration: BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
                         ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
+                label: 'Pedidos',
               ),
-              label: 'Pedidos',
-            ),
-            BottomNavigationBarItem(icon: Icon(Icons.list_alt_rounded), label: 'Informes'),
-            BottomNavigationBarItem(icon: Icon(Icons.people), label: 'Clientes'),
-          ],
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
+              BottomNavigationBarItem(icon: Icon(Icons.list_alt_rounded, size: 22.w), label: 'Informes'),
+              BottomNavigationBarItem(icon: Icon(Icons.people, size: 22.w), label: 'Clientes'),
+            ],
+            currentIndex: _selectedIndex,
+            onTap: _onItemTapped,
+          ),
         ),
       ),
     );

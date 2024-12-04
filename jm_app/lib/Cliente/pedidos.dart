@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert'; 
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const String baseUrl = 'https://distribucionesjm-app.onrender.com';
 
@@ -162,7 +163,9 @@ class _PedidosState extends State<Pedidos> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -249,6 +252,7 @@ class _PedidosState extends State<Pedidos> {
                 ],
               ),
       ),
+    ),
     );
   }
 

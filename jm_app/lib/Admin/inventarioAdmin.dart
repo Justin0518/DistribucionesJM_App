@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jm_app/login.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const String baseUrl = 'https://distribucionesjm-app.onrender.com';
 
@@ -120,26 +121,33 @@ void toggleProducto(int index, List<Map<String, dynamic>> productosFiltrados) {
 void _showFilterOptions() {
   showModalBottomSheet(
     context: context,
-    isScrollControlled: true,  // Permite ajustar mejor el modal a la pantalla
+    isScrollControlled: true, // Permite ajustar mejor el modal a la pantalla
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)), // Radio responsivo
     ),
     builder: (BuildContext context) {
       return SingleChildScrollView(
         child: Container(
-          padding: const EdgeInsets.all(16.0),
-          height: MediaQuery.of(context).size.height * 0.35,  // Ajustamos la altura al 35% de la pantalla
+          padding: EdgeInsets.all(12.w), // Espaciado responsivo
+          height: 0.31.sh, // Altura ajustada al 35% de la pantalla
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
+              SizedBox(height: 10.h),
+              Text(
                 "Filtrar productos",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 14.sp, // Tamaño de texto responsivo
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 15.h), // Espaciado vertical responsivo
               ListTile(
-                leading: const Icon(Icons.check_circle, color: Colors.green),
-                title: const Text("Mostrar solo productos activos"),
+                leading: Icon(Icons.check_circle, color: Colors.green, size: 20.w), // Icono responsivo
+                title: Text(
+                  "Mostrar solo productos activos",
+                  style: TextStyle(fontSize: 12.sp), // Texto responsivo
+                ),
                 onTap: () {
                   setState(() {
                     mostrarActivos = true;
@@ -148,8 +156,11 @@ void _showFilterOptions() {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.remove_circle, color: Colors.red),
-                title: const Text("Mostrar solo productos inactivos"),
+                leading: Icon(Icons.remove_circle, color: Colors.red, size: 20.w), // Icono responsivo
+                title: Text(
+                  "Mostrar solo productos inactivos",
+                  style: TextStyle(fontSize: 12.sp), // Texto responsivo
+                ),
                 onTap: () {
                   setState(() {
                     mostrarActivos = false;
@@ -158,11 +169,14 @@ void _showFilterOptions() {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.all_inclusive),
-                title: const Text("Mostrar todos los productos"),
+                leading: Icon(Icons.all_inclusive, size: 20.w), // Icono responsivo
+                title: Text(
+                  "Mostrar todos los productos",
+                  style: TextStyle(fontSize: 12.sp), // Texto responsivo
+                ),
                 onTap: () {
                   setState(() {
-                    mostrarActivos = null;  // Mostrar todos
+                    mostrarActivos = null; // Mostrar todos
                   });
                   Navigator.pop(context);
                 },
@@ -215,10 +229,12 @@ void _showFilterOptions() {
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> productosFiltrados = _filterProducts(searchQuery);
 
-   return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
+        preferredSize: Size.fromHeight(60.h),
         child: Stack(
           children: [
             AppBar(
@@ -234,11 +250,11 @@ void _showFilterOptions() {
               ),
             ),
             Positioned(
-              top: -85,
-              left: -112,
+              top: -85.h,
+              left: -112.w,
               child: Container(
-                width: 280,
-                height: 170,
+                width: 280.w,
+                height: 170.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
@@ -255,11 +271,11 @@ void _showFilterOptions() {
               ),
             ),
             Positioned(
-              top: -103,
-              left: 181,
+              top: -103.h,
+              left: 181.w,
               child: Container(
-                width: 268,
-                height: 249,
+                width: 268.w,
+                height: 249.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
@@ -276,11 +292,11 @@ void _showFilterOptions() {
               ),
             ),
             Positioned(
-              top: -103,
-              left: 210,
+              top: -103.h,
+              left: 210.w,
               child: Container(
-                width: 167,
-                height: 167,
+                width: 167.w,
+                height: 167.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
@@ -297,11 +313,11 @@ void _showFilterOptions() {
               ),
             ),
             Positioned(
-              top: -46,
-              left: 281,
+              top: -46.h,
+              left: 281.w,
               child: Container(
-                width: 100,
-                height: 83,
+                width: 100.w,
+                height: 83.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: LinearGradient(
@@ -318,12 +334,12 @@ void _showFilterOptions() {
               ),
             ),
             Positioned(
-              top: 29,
-              left: 10,
+              top: 29.h,
+              left: 10.w,
               child: Builder(
                 builder: (context) {
                   return IconButton(
-                    icon: const Icon(Icons.menu, color: Color(0xFFFFFFFF), size: 30),
+                    icon: Icon(Icons.menu, color: Color(0xFFFFFFFF), size: 25.w),
                     onPressed: widget.openDrawer,
                   );
                 },
@@ -333,30 +349,28 @@ void _showFilterOptions() {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: EdgeInsets.all(14.w),
         child: Container(
           child: Column(
             children: [
-              
-              const SizedBox(height: 15),
-              // Logo en el centro de la pantalla
+              SizedBox(height: 4.h),
               Center(
                 child: Image.asset(
                   'assets/images/logo.png',
-                  height: 50,
+                  height: 40.h,
                 ),
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: 10.h),
               // Barra de búsqueda y filtrado
               Row(
                 
                 children: [
                   Expanded(
                     child: Container(
-                      height: 40,
+                      height: 30.h,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(30.r),
                         border: Border.all(color: Color(0xFFE4E4E4)),
                       ),
                       child: TextField(
@@ -368,22 +382,22 @@ void _showFilterOptions() {
                         textAlign: TextAlign.left,
                         decoration: InputDecoration(
                           hintText: 'Buscar producto',
-                          hintStyle: TextStyle(color: Color(0xFFB0B0B0)),
-                          suffixIcon: Icon(Icons.search, color: Color(0xFF828282)),
+                          hintStyle: TextStyle(color: Color(0xFFB0B0B0), fontSize: 12.sp),
+                          suffixIcon: Icon(Icons.search, color: Color(0xFF828282), size: 18.w),
                           border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                          contentPadding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 25.w),
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 10),
+                  SizedBox(width: 5.w),
                   IconButton(
-                    icon: const Icon(Icons.filter_list, color: Color(0xFF828282)),
+                    icon: Icon(Icons.filter_list, color: Color(0xFF828282), size: 22.w),
                     onPressed: _showFilterOptions,
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: 4.h),
               // Lista de productos
               Expanded(
                 child: ListView.builder(
@@ -397,7 +411,7 @@ void _showFilterOptions() {
                         color: Color.fromARGB(255, 252, 251, 251),
                         elevation: 3,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(20.r),
                         ),
                         child: ListTile(
                           leading: productosFiltrados[index]['imgUrl'].isNotEmpty
@@ -406,19 +420,27 @@ void _showFilterOptions() {
                                   backgroundColor: Colors.transparent,
                                 )
                               : CircleAvatar(
-                                  child: Icon(Icons.person, color: Colors.white),
+                                  child: Icon(Icons.person, color: Colors.white, size: 20.w),
                                   backgroundColor: Colors.grey,
                                 ),
-                          title: Text(productosFiltrados[index]['nombre']),
+                          title: Text(
+                            productosFiltrados[index]['nombre'],
+                            style: TextStyle(fontSize: 14.sp),
+                          ),
                           subtitle: Text(
-                              "Stock: ${productosFiltrados[index]['stock']} - ${productosFiltrados[index]['activo'] ? 'Activo' : 'Inactivo'}"),
-                          trailing: Switch(
-                            value: productosFiltrados[index]['activo'],
-                            onChanged: (value) {
-                              toggleProducto(index, productosFiltrados);
-                            },
-                            activeColor: Colors.green,
-                            inactiveThumbColor: Colors.red,
+                            "Stock: ${productosFiltrados[index]['stock']} - ${productosFiltrados[index]['activo'] ? 'Activo' : 'Inactivo'}",
+                            style: TextStyle(fontSize: 12.sp),
+                          ),
+                          trailing: Transform.scale(
+                            scale: 0.75.w, // Escala responsiva basada en el ancho de la pantalla
+                            child: Switch(
+                              value: productosFiltrados[index]['activo'],
+                              onChanged: (value) {
+                                toggleProducto(index, productosFiltrados);
+                              },
+                              activeColor: Colors.green,
+                              inactiveThumbColor: Colors.red,
+                            ),
                           ),
                         ),
                       ),
@@ -430,11 +452,20 @@ void _showFilterOptions() {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _navigateToAddProduct,  // Llamar la función de navegación
-        backgroundColor: Colors.red,
-        child: Icon(Icons.add, color: Colors.white),
+      floatingActionButton: SizedBox(
+        width: 50.w, // Ancho responsivo del botón
+        height: 45.h, // Altura responsiva del botón
+        child: FloatingActionButton(
+          onPressed: _navigateToAddProduct, // Llamar la función de navegación
+          backgroundColor: Colors.red,
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 20.w, // Tamaño responsivo del ícono
+          ),
+        ),
       ),
+    ),
     );
   }
 }
@@ -616,20 +647,22 @@ class _AgregarProductoState extends State<AgregarProducto> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios, color: Color(0xFF828282)),
+          icon: Icon(Icons.arrow_back_ios, color: Color(0xFF828282), size: 20.sp),
           onPressed: () {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Agregar Producto',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -637,16 +670,16 @@ class _AgregarProductoState extends State<AgregarProducto> {
         backgroundColor: Colors.white,
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
       body: SingleChildScrollView(  // Aquí agregamos el scroll
         child: Padding(
-          padding: const EdgeInsets.all(40.0),
+          padding: EdgeInsets.all(40.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -654,29 +687,30 @@ class _AgregarProductoState extends State<AgregarProducto> {
                 child: GestureDetector(
                   onTap: _pickImage, // Al tocar la cámara, seleccionamos una imagen
                   child: CircleAvatar(
-                    radius: 50,
+                    radius: 50.r,
                     backgroundColor: Colors.grey[200],
                     backgroundImage: _image != null ? FileImage(_image!) : null, // Muestra la imagen si está seleccionada
                     child: _image == null
-                        ? Icon(Icons.camera_alt, size: 50, color: Colors.grey)
+                        ? Icon(Icons.camera_alt, size: 50.w, color: Colors.grey)
                         : null, // Si no hay imagen, muestra el ícono de cámara
                   ),
                 ),
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: 30.h),
               // Nombre del producto
               TextField(
                 controller: nombreProductoController,
+                style: TextStyle(fontSize: 14.sp), 
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color.fromARGB(255, 253, 253, 253),
                   labelText: 'Nombre del Producto',
                   border: OutlineInputBorder(),
                   hintText: 'Ingrese el nombre del producto',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  labelStyle: TextStyle(color: Colors.grey),
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 13.sp),
+                  labelStyle: TextStyle(color: Colors.grey, fontSize: 13.sp),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 onChanged: (value) {
@@ -685,21 +719,22 @@ class _AgregarProductoState extends State<AgregarProducto> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 15.h),
 
               // Cantidad Disponible
               TextField(
                 controller: cantidadStockController,
+                style: TextStyle(fontSize: 14.sp),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color.fromARGB(255, 253, 253, 253),
                   labelText: 'Cantidad Disponible',
                   border: OutlineInputBorder(),
                   hintText: 'Ingrese la cantidad disponible',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  labelStyle: TextStyle(color: Colors.grey),
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 13.sp),
+                  labelStyle: TextStyle(color: Colors.grey, fontSize: 13.sp),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 keyboardType: TextInputType.number,
@@ -709,21 +744,22 @@ class _AgregarProductoState extends State<AgregarProducto> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 15.h),
 
               // Precio
               TextField(
                 controller: precioController, 
+                style: TextStyle(fontSize: 14.sp),
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Color.fromARGB(255, 253, 253, 253),
                   labelText: 'Precio',
                   border: OutlineInputBorder(),
                   hintText: 'Ingrese el precio',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  labelStyle: TextStyle(color: Colors.grey),
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 13.sp),
+                  labelStyle: TextStyle(color: Colors.grey, fontSize: 13.sp),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 keyboardType: TextInputType.number,
@@ -733,9 +769,10 @@ class _AgregarProductoState extends State<AgregarProducto> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 15.h),
               TextField(
                 controller: descripcionController, // Campo para descripción
+                style: TextStyle(fontSize: 14.sp),
                 maxLines: 4, // Permite múltiples líneas para el texto
                 decoration: InputDecoration(
                   filled: true,
@@ -743,10 +780,10 @@ class _AgregarProductoState extends State<AgregarProducto> {
                   labelText: 'Descripción',
                   border: OutlineInputBorder(),
                   hintText: 'Ingrese la descripción del producto',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  labelStyle: TextStyle(color: Colors.grey),
+                  hintStyle: TextStyle(color: Colors.grey, fontSize: 13.sp),
+                  labelStyle: TextStyle(color: Colors.grey, fontSize: 13.sp),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                    borderSide: BorderSide(color: Colors.red, width: 2.w),
                   ),
                 ),
                 onChanged: (value) {
@@ -755,86 +792,99 @@ class _AgregarProductoState extends State<AgregarProducto> {
                   });
                 },
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 15.h),
               // Categoría
-              DropdownButtonFormField<String>(
-                value: categoriaSeleccionada.isNotEmpty ? categoriaSeleccionada : null,
-                items: categorias.map<DropdownMenuItem<String>>((Map<String, String> categoria) {
-                  return DropdownMenuItem<String>(
-                    value: categoria['id'],  // El valor del DropdownMenuItem debe ser un String (el ID de la categoría)
-                    child: Text(categoria['nombre']!),  // El texto visible debe ser el nombre de la categoría
-                  );
-                }).toList(),  // Convierte la lista dinámica en una lista de DropdownMenuItem<String>
-                onChanged: (String? nuevaCategoriaId) {
-                  setState(() {
-                    categoriaSeleccionada = nuevaCategoriaId!;
-                  });
-                  
-                  // Llamar a la función para cargar subcategorías usando el ID de la categoría seleccionada
-                  fetchSubcategorias(categoriaSeleccionada);
+             DropdownButtonFormField<String>(
+              value: categoriaSeleccionada.isNotEmpty ? categoriaSeleccionada : null,
+              items: categorias.map<DropdownMenuItem<String>>((Map<String, String> categoria) {
+                return DropdownMenuItem<String>(
+                  value: categoria['id'], // El valor del DropdownMenuItem debe ser un String (el ID de la categoría)
+                  child: Text(
+                    categoria['nombre']!,
+                    style: TextStyle(fontSize: 14.sp), // Tamaño de fuente responsivo
+                  ),
+                );
+              }).toList(), // Convierte la lista dinámica en una lista de DropdownMenuItem<String>
+              onChanged: (String? nuevaCategoriaId) {
+                setState(() {
+                  categoriaSeleccionada = nuevaCategoriaId!;
+                });
+
+                // Llamar a la función para cargar subcategorías usando el ID de la categoría seleccionada
+                fetchSubcategorias(categoriaSeleccionada);
+              },
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Color.fromARGB(255, 253, 253, 253),
+                labelText: 'Categoría',
+                labelStyle: TextStyle(color: Colors.grey, fontSize: 13.sp), // Tamaño de fuente responsivo
+                border: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 2.w), // Ancho responsivo
+                ),
+              ),
+            ),
+            SizedBox(height: 15.h), // Espaciado responsivo
+
+            // Subcategoría
+            DropdownButtonFormField<String>(
+              value: subcategoriaSeleccionada.isNotEmpty ? subcategoriaSeleccionada : null,
+              items: subcategorias.map<DropdownMenuItem<String>>((Map<String, String> subcategoria) {
+                return DropdownMenuItem<String>(
+                  value: subcategoria['id'], // Usar el ID de la subcategoría
+                  child: Text(
+                    subcategoria['nombre']!,
+                    style: TextStyle(fontSize: 13.sp), // Tamaño de fuente responsivo
+                  ),
+                );
+              }).toList(),
+              onChanged: (String? nuevaSubcategoriaId) {
+                setState(() {
+                  subcategoriaSeleccionada = nuevaSubcategoriaId!;
+                });
+              },
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: Color.fromARGB(255, 253, 253, 253),
+                labelText: 'Subcategoría',
+                labelStyle: TextStyle(color: Colors.grey,fontSize: 13.sp), // Tamaño de fuente responsivo
+                border: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.red, width: 2.w), // Ancho responsivo
+                ),
+              ),
+            ),
+            SizedBox(height: 40.h), // Espaciado responsivo
+
+            // Botón de Guardar Producto
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  agregarProducto();
                 },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 253, 253, 253),
-                  labelText: 'Categoría',
-                  border: OutlineInputBorder(),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.r), // Esquinas responsivas
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 12.h, // Padding vertical responsivo
+                    horizontal: 40.w, // Padding horizontal responsivo
                   ),
                 ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // Subcategoría
-              DropdownButtonFormField<String>(
-                value: subcategoriaSeleccionada.isNotEmpty ? subcategoriaSeleccionada : null,
-                items: subcategorias.map<DropdownMenuItem<String>>((Map<String, String> subcategoria) {
-                  return DropdownMenuItem<String>(
-                    value: subcategoria['id'],  // Usar el ID de la subcategoría
-                    child: Text(subcategoria['nombre']!),
-                  );
-                }).toList(),
-                onChanged: (String? nuevaSubcategoriaId) {
-                  setState(() {
-                    subcategoriaSeleccionada = nuevaSubcategoriaId!;
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Color.fromARGB(255, 253, 253, 253),
-                  labelText: 'Subcategoría',
-                  border: OutlineInputBorder(),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
-                  ),
+                child: Text(
+                  'Agregar',
+                  style: TextStyle(color: Colors.white, fontSize: 14.sp), // Texto responsivo
                 ),
               ),
-              const SizedBox(height: 40),
+            ),
 
-              // Botón de Guardar Producto
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    agregarProducto();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 15, horizontal: 40),
-                  ),
-                  child: const Text('Agregar',
-                      style: TextStyle(color: Colors.white)),
-                ),
-              ),
             ],
           ),
         ),
       ),
-    );
+   )
+  );
   }
 }
 
@@ -1045,7 +1095,9 @@ class _DetalleProductoState extends State<DetallesProducto> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Color(0xFF828282)),
@@ -1053,11 +1105,11 @@ class _DetalleProductoState extends State<DetallesProducto> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Editar Producto',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -1065,10 +1117,10 @@ class _DetalleProductoState extends State<DetallesProducto> {
         backgroundColor: Colors.white,
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
@@ -1076,7 +1128,7 @@ class _DetalleProductoState extends State<DetallesProducto> {
           ? Center(child: CircularProgressIndicator()) // Mostrar indicador de carga
           : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(40.0),
+                padding: EdgeInsets.all(40.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -1084,7 +1136,7 @@ class _DetalleProductoState extends State<DetallesProducto> {
                       child: GestureDetector(
                         onTap: _pickImage,
                         child: CircleAvatar(
-                          radius: 50,
+                          radius: 50.r,
                           backgroundColor: Colors.grey[200],
                           backgroundImage: hasImage && _image != null
                               ? FileImage(_image!)
@@ -1092,29 +1144,31 @@ class _DetalleProductoState extends State<DetallesProducto> {
                                   ? NetworkImage(imageUrl!) as ImageProvider
                                   : null,
                           child: (_image == null && (imageUrl == null || imageUrl!.isEmpty)) 
-                            ? Icon(Icons.camera_alt, size: 50, color: Colors.grey)
+                            ? Icon(Icons.camera_alt, size: 50.w, color: Colors.grey)
                             : null,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    SizedBox(height: 30.h),
                     // Nombre del producto
                     TextField(
                       controller: nombreController,
+                      style: TextStyle(fontSize: 14.sp),
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Color.fromARGB(255, 253, 253, 253),
                         labelText: 'Nombre del Producto',
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red, width: 2.0),
+                          borderSide: BorderSide(color: Colors.red, width: 2.w),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 15),
                     // Cantidad Disponible
                     TextField(
                       controller: cantidadController,
+                      style: TextStyle(fontSize: 14.sp),
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         filled: true,
@@ -1122,14 +1176,15 @@ class _DetalleProductoState extends State<DetallesProducto> {
                         labelText: 'Cantidad Disponible',
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red, width: 2.0),
+                          borderSide: BorderSide(color: Colors.red, width: 2.w),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 15.h),
                     // Precio
                     TextField(
                       controller: precioController,
+                      style: TextStyle(fontSize: 14.sp),
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                         filled: true,
@@ -1137,13 +1192,14 @@ class _DetalleProductoState extends State<DetallesProducto> {
                         labelText: 'Precio',
                         border: OutlineInputBorder(),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.red, width: 2.0),
+                          borderSide: BorderSide(color: Colors.red, width: 2.w),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 15.h),
                     TextField(
                       controller: descripcionController,
+                      style: TextStyle(fontSize: 14.sp),
                       maxLines: 4, // Permite múltiples líneas para el texto
                       decoration: InputDecoration(
                         filled: true,
@@ -1158,14 +1214,17 @@ class _DetalleProductoState extends State<DetallesProducto> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 15.h),
                     // Categoría
                     DropdownButtonFormField<String>(
                       value: categoriaSeleccionada,
                       items: categorias.map<DropdownMenuItem<String>>((Map<String, String> categoria) {
                         return DropdownMenuItem<String>(
                           value: categoria['id'],
-                          child: Text(categoria['nombre']!),
+                          child: Text(categoria['nombre']!,
+                          style: TextStyle(fontSize: 14.sp)
+                          ),
+                          
                         );
                       }).toList(),
                       onChanged: (String? nuevaCategoriaId) {
@@ -1184,7 +1243,7 @@ class _DetalleProductoState extends State<DetallesProducto> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 15.h),
                     // Subcategoría
                     DropdownButtonFormField<String>(
                       value: subcategorias.isNotEmpty 
@@ -1195,7 +1254,11 @@ class _DetalleProductoState extends State<DetallesProducto> {
                       items: subcategorias.map<DropdownMenuItem<String>>((Map<String, String> subcategoria) {
                         return DropdownMenuItem<String>(
                           value: subcategoria['id'],  // Usar el ID de la subcategoría
-                          child: Text(subcategoria['nombre']!),  // Mostrar el nombre de la subcategoría
+                          child: Text(
+                            subcategoria['nombre']!,
+                            style: TextStyle(fontSize: 14.sp)
+                            ),  // Mostrar el nombre de la subcategoría
+                          
                         );
                       }).toList(),
                       onChanged: (String? nuevaSubcategoriaId) {
@@ -1215,7 +1278,7 @@ class _DetalleProductoState extends State<DetallesProducto> {
                       ),
                     ),
 
-                    const SizedBox(height: 40),
+                    SizedBox(height: 40.h),
                     // Botón de Guardar Cambios
                     Center(
                       child: ElevatedButton(
@@ -1223,14 +1286,14 @@ class _DetalleProductoState extends State<DetallesProducto> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 30.w),
                         ),
-                        child: const Text('Guardar cambios', style: TextStyle(color: Colors.white)),
+                        child: Text('Guardar cambios', style: TextStyle(color: Colors.white, fontSize: 14.sp)),
                       ),
                     ),
-                    const SizedBox(height: 20), // Separación entre los botones
+                    SizedBox(height: 15.h), // Separación entre los botones
                     // Botón de Eliminar Producto
                     Center(
                       child: ElevatedButton(
@@ -1238,17 +1301,18 @@ class _DetalleProductoState extends State<DetallesProducto> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
-                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 40),
+                          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 30.w),
                         ),
-                        child: const Text('Eliminar Producto', style: TextStyle(color: Colors.white)),
+                        child: Text('Eliminar Producto', style: TextStyle(color: Colors.white, fontSize: 14.sp)),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-    );
+    ),
+  );
   }
 }

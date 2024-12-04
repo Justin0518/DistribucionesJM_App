@@ -6,6 +6,7 @@ import 'package:jm_app/Cliente/categorias.dart';
 import 'package:jm_app/Cliente/carrito.dart';
 import 'package:jm_app/Cliente/inicio.dart';
 import 'package:jm_app/login.dart'; // Suponiendo que tienes esta pantalla para cerrar sesión
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const String baseUrl = 'https://distribucionesjm-app.onrender.com';
 
@@ -107,7 +108,9 @@ class _NavegarState extends State<Navegar> {
 
 @override
 Widget build(BuildContext context) {
-  return Scaffold(
+  return ScreenUtilInit(
+    designSize: Size(360, 690),
+    builder: (context, child) => Scaffold(
     key: _scaffoldKey,
     drawer: Drawer(
       child: ListView(
@@ -166,7 +169,7 @@ Widget build(BuildContext context) {
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: Text('Inicio'),
+            title: Text('Inicio', style: TextStyle(fontSize: 12.sp)),
             onTap: () {
               Navigator.pop(context);
               _onItemTapped(0);
@@ -174,7 +177,7 @@ Widget build(BuildContext context) {
           ),
           ListTile(
             leading: Icon(Icons.assignment),
-            title: Text('Pedidos'),
+            title: Text('Pedidos', style: TextStyle(fontSize: 12.sp)),
             onTap: () {
               Navigator.pop(context);
               _onItemTapped(1);
@@ -182,7 +185,7 @@ Widget build(BuildContext context) {
           ),
           ListTile(
             leading: Icon(Icons.category),
-            title: Text('Categorías'),
+            title: Text('Categorías', style: TextStyle(fontSize: 12.sp)),
             onTap: () {
               Navigator.pop(context);
               _onItemTapped(2);
@@ -190,7 +193,7 @@ Widget build(BuildContext context) {
           ),
           ListTile(
             leading: Icon(Icons.shopping_cart),
-            title: Text('Carrito'),
+            title: Text('Carrito', style: TextStyle(fontSize: 12.sp)),
             onTap: () {
               Navigator.pop(context);
               _onItemTapped(3);
@@ -198,7 +201,7 @@ Widget build(BuildContext context) {
           ),
           ListTile(
             leading: Icon(Icons.exit_to_app),
-            title: Text('Cerrar sesión'),
+            title: Text('Cerrar sesión', style: TextStyle(fontSize: 12.sp)),
             onTap: () {
               Navigator.pop(context);
               _cerrarSesion();
@@ -224,7 +227,7 @@ Widget build(BuildContext context) {
       bottomNavigationBar: _selectedIndex == 3
           ? null
           : Container(
-              height: 80,
+              height: 60.h,
               decoration: const BoxDecoration(
                 color: Color(0xFFFFFFFF),
                 boxShadow: [
@@ -245,8 +248,8 @@ Widget build(BuildContext context) {
                 selectedItemColor: Colors.red,
                 unselectedItemColor: Color(0xFF828282),
                 showUnselectedLabels: true,
-                selectedLabelStyle: const TextStyle(fontSize: 16),
-                unselectedLabelStyle: const TextStyle(fontSize: 14),
+                selectedLabelStyle: TextStyle(fontSize: 12.sp),
+                unselectedLabelStyle: TextStyle(fontSize: 12.sp),
                 type: BottomNavigationBarType.fixed,
                 items: [
                   BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio'),
@@ -264,7 +267,7 @@ Widget build(BuildContext context) {
                               padding: const EdgeInsets.all(0),
                               decoration: BoxDecoration(
                                 color: Color(0xFFE33914),
-                                borderRadius: BorderRadius.circular(200),
+                                borderRadius: BorderRadius.circular(200.r),
                               ),
                               constraints: const BoxConstraints(
                                 minWidth: 14,
@@ -274,7 +277,7 @@ Widget build(BuildContext context) {
                                 '$_carritoCount',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 12,
+                                  fontSize: 12.sp,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -289,6 +292,7 @@ Widget build(BuildContext context) {
                 onTap: _onItemTapped,
               ),
             ),
+    ),
     );
   }
 }

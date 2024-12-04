@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jm_app/login.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart'; 
 
 
 const String baseUrl = 'https://distribucionesjm-app.onrender.com';
@@ -127,16 +128,16 @@ void _showPriceFilter() {
       return StatefulBuilder(
         builder: (BuildContext context, StateSetter setModalState) {
           return Container(
-            padding: const EdgeInsets.all(16.0),
-            height: 250,
+            padding: EdgeInsets.all(16.h),
+            height: 250.h,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   "Filtrar por Precio",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -172,7 +173,7 @@ void _showPriceFilter() {
                     },
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
@@ -210,10 +211,12 @@ void _applyPriceFilter() {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
+        preferredSize: Size.fromHeight(50.h),
         child: Stack(
           children: [
             AppBar(
@@ -321,7 +324,7 @@ void _applyPriceFilter() {
               child: Builder(
                 builder: (context) {
                   return IconButton(
-                    icon: const Icon(Icons.menu, color: Color(0xFFFFFFFF), size: 30),
+                    icon: Icon(Icons.menu, color: Color(0xFFFFFFFF), size: 25.w),
                     onPressed: widget.openDrawer,
                   );
                 },
@@ -330,157 +333,173 @@ void _applyPriceFilter() {
           ],
         ),
       ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(14.0),
-              child: Container(
-                child: Column(
+body: isLoading
+    ? Center(child: CircularProgressIndicator())
+    : Padding(
+        padding: EdgeInsets.all(14.h), // Padding externo responsivo
+        child: Container(
+          child: Column(
+            children: [
+              SizedBox(height: 4.h), // Espaciado responsivo
+              Image.asset(
+                'assets/images/logo.png',
+                height: 40.h, // Altura responsiva de la imagen
+              ),
+              SizedBox(height: 10.h), // Espaciado responsivo
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 2.w), // Padding responsivo
+                child: Row(
                   children: [
-                    const SizedBox(height: 15),
-                    Image.asset(
-                        'assets/images/logo.png',
-                        height: 50,
-                    ),
-
-                    const SizedBox(height: 16),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15), // Aplica padding externo a todo el contenedor
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => SearchScreen(clienteId: widget.clienteId, actualizarCarrito: widget.actualizarCarrito)),
-                                );
-                              },
-                              child: Container(
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(color: Color(0xFFE4E4E4)),
-                                ),
-                                child: Row(
-                                  children: [
-                                    SizedBox(width: 15),
-                                    Icon(Icons.search, color: Color(0xFF828282)),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      "Buscar productos...",
-                                      style: TextStyle(color: Color(0xFFB0B0B0)),
-                                    ),
-                                  ],
-                                ),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SearchScreen(
+                                clienteId: widget.clienteId,
+                                actualizarCarrito: widget.actualizarCarrito,
                               ),
                             ),
+                          );
+                        },
+                        child: Container(
+                          height: 30.h, // Altura responsiva
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30.r), // Bordes redondeados responsivos
+                            border: Border.all(color: Color(0xFFE4E4E4)),
                           ),
-                          const SizedBox(width: 10),
-                          IconButton(
-                            icon: Icon(Icons.filter_list),
-                            onPressed: _showPriceFilter
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-                  Expanded(
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: categorias.map<Widget>((categoria) {
-                        // Filtrar los productos de la categoría actual por precio
-                        List<dynamic> productosFiltradosCategoria = categoria['productos']
-                            .where((producto) =>
-                                producto['estado'] == 'Activo' && // Solo productos activos
-                                producto['precio'] >= _precioMin &&
-                                producto['precio'] <= _precioMax) // Filtro de precio aplicado
-                            .toList();
-
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildSectionTitle(categoria['nombreCategoria'], Icons.category),
-                            _buildProductList(productosFiltradosCategoria),
-                            if (categoria['productos'] != null && categoria['productos'].length > 5)
-                              Center(
-                                child: TextButton(
-                                  onPressed: () => verProductos(
-                                    widget.clienteId,
-                                    categoria['_id'],
-                                    categoria['nombreCategoria'],
-                                  ),
-                                  child: const Text(
-                                    'Ver más',
-                                    style: TextStyle(color: Colors.grey, fontSize: 16),
-                                  ),
+                          child: Row(
+                            children: [
+                              SizedBox(width: 10.w), // Espaciado responsivo
+                              Icon(Icons.search, color: Color(0xFF828282), size: 16.sp), // Ícono responsivo
+                              SizedBox(width: 10.w),
+                              Text(
+                                "Buscar productos...",
+                                style: TextStyle(
+                                  color: Color(0xFFB0B0B0),
+                                  fontSize: 12.sp, // Fuente responsiva
                                 ),
                               ),
-                          ],
-                        );
-                      }).toList(),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-
-
+                    SizedBox(width: 5.w),
+                    IconButton(
+                      icon: Icon(Icons.filter_list, size: 18.sp), // Ícono responsivo
+                      onPressed: _showPriceFilter,
+                    ),
                   ],
                 ),
               ),
-            ),
-    );
-  }
 
-  Widget _buildSectionTitle(String title, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.yellow),
-          const SizedBox(width: 8),
-          Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildProductList(List<dynamic> productosCategorias) {
-    return SizedBox(
-      height: 250,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: productosCategorias.length, 
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        itemBuilder: (context, index) {
-          return GestureDetector(
-            onTap: () {
-              // Navegar a la pantalla de detalle de producto cuando se toca una tarjeta
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DetalleProducto(productId: productosCategorias[index]['_id'],clienteId: widget.clienteId, actualizarCarrito: widget.actualizarCarrito),
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: categorias.map<Widget>((categoria) {
+                    // Filtrar los productos de la categoría actual por precio
+                    List<dynamic> productosFiltradosCategoria = categoria['productos']
+                        .where((producto) =>
+                            producto['estado'] == 'Activo' && // Solo productos activos
+                            producto['precio'] >= _precioMin &&
+                            producto['precio'] <= _precioMax) // Filtro de precio aplicado
+                        .toList();
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildSectionTitle(categoria['nombreCategoria'], Icons.category),
+                        _buildProductList(productosFiltradosCategoria),
+                        if (categoria['productos'] != null && categoria['productos'].length > 5)
+                          Center(
+                            child: TextButton(
+                              onPressed: () => verProductos(
+                                widget.clienteId,
+                                categoria['_id'],
+                                categoria['nombreCategoria'],
+                              ),
+                              child: Text(
+                                'Ver más',
+                                style: TextStyle(color: Colors.grey, fontSize: 12.sp), // Fuente responsiva
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  }).toList(),
                 ),
-              );
-            },
-            child: _buildProductCard(productosCategorias[index]),
-          );
-        },
+              ),
+            ],
+          ),
+        ),
       ),
+
+    ),
     );
   }
+
+Widget _buildSectionTitle(String title, IconData icon) {
+  return Padding(
+    padding: EdgeInsets.symmetric(vertical: 8.h), // Espaciado responsivo
+    child: Row(
+      children: [
+        Icon(icon, color: Colors.yellow, size: 20.sp), // Icono responsivo
+        SizedBox(width: 8.w), // Espaciado horizontal responsivo
+        Text(
+          title,
+          style: TextStyle(
+            fontSize: 14.sp, // Fuente responsiva
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildProductList(List<dynamic> productosCategorias) {
+  return SizedBox(
+    height: 222.h, // Altura responsiva del carrusel de productos
+    child: ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: productosCategorias.length,
+      physics: const BouncingScrollPhysics(),
+      itemBuilder: (context, index) {
+        return GestureDetector(
+          onTap: () {
+            // Navegar a la pantalla de detalle de producto cuando se toca una tarjeta
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetalleProducto(
+                  productId: productosCategorias[index]['_id'],
+                  clienteId: widget.clienteId,
+                  actualizarCarrito: widget.actualizarCarrito,
+                ),
+              ),
+            );
+          },
+          child: _buildProductCard(productosCategorias[index]),
+        );
+      },
+    ),
+  );
+}
 
 Widget _buildProductCard(Map<String, dynamic> producto) {
   bool sinStock = producto['cantidad'] == 0; // Verificamos si no hay stock
 
   return Container(
-    width: 160, // Ajusta el ancho para cartas más grandes
-    margin: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 9.0),
+    width: 160.w, // Ancho responsivo de la carta
+    margin: EdgeInsets.symmetric(horizontal: 6.w, vertical: 12.h),
     decoration: BoxDecoration(
       color: Colors.white,
       border: Border.all(color: const Color(0xFFE4E4E4)),
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(20.r),
       boxShadow: [
         BoxShadow(
           color: Colors.black12,
@@ -493,10 +512,10 @@ Widget _buildProductCard(Map<String, dynamic> producto) {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          height: 100,
+          height: 80.h, // Altura responsiva de la imagen
           width: double.infinity,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
             image: DecorationImage(
               image: NetworkImage(producto['imgUrl']),
               fit: BoxFit.cover,
@@ -504,31 +523,35 @@ Widget _buildProductCard(Map<String, dynamic> producto) {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                height: 35, // Ajustamos la altura para que todos los nombres ocupen el mismo espacio
+                height: 30.h, // Altura responsiva para mantener alineación
                 child: Text(
                   producto['nombreProducto'],
-                  style: const TextStyle(fontWeight: FontWeight.normal),
+                  style: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 12.sp, // Fuente responsiva
+                  ),
                   maxLines: 2, // Limitar a dos líneas
-                  overflow: TextOverflow.ellipsis, // Si el texto es muy largo, usar puntos suspensivos
+                  overflow: TextOverflow.ellipsis, // Puntos suspensivos si el texto es largo
                 ),
               ),
-              const SizedBox(height: 12),
+              SizedBox(height: 8.h),
               Text(
                 '\$${formatPrice(producto['precio'])}', // Formato de precio
-                style: const TextStyle(
-                  color: Color.fromARGB(255, 0, 0, 0),
+                style: TextStyle(
+                  color: const Color.fromARGB(255, 0, 0, 0),
                   fontWeight: FontWeight.bold,
+                  fontSize: 14.sp, // Fuente responsiva
                 ),
               ),
-              const SizedBox(height: 9),
+              SizedBox(height: 9.h),
               SizedBox(
-                width: double.infinity, // Asegura que el botón ocupe todo el ancho disponible
-                height: 30, // Ajusta la altura del botón
+                width: double.infinity, // Botón ocupa todo el ancho
+                height: 30.h, // Altura responsiva del botón
                 child: ElevatedButton(
                   onPressed: sinStock
                       ? null // Deshabilita el botón si no hay stock
@@ -540,15 +563,15 @@ Widget _buildProductCard(Map<String, dynamic> producto) {
                     backgroundColor: sinStock ? Colors.white : Colors.red, // Fondo blanco si no hay stock
                     side: BorderSide(color: Colors.red), // Borde rojo
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
-                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    padding: EdgeInsets.symmetric(vertical: 5.h), // Padding vertical responsivo
                   ),
                   child: Text(
                     sinStock ? 'Sin stock' : 'Añadir al carrito', // Texto cambia según disponibilidad
                     style: TextStyle(
                       color: sinStock ? Colors.red : Colors.white, // Texto rojo si no hay stock, blanco si lo hay
-                      fontSize: 12, // Ajustar tamaño de fuente si es necesario
+                      fontSize: 12.sp, // Fuente responsiva
                     ),
                   ),
                 ),
@@ -950,7 +973,9 @@ void _showPriceFilter() {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Color(0xFF828282)),
@@ -962,7 +987,7 @@ void _showPriceFilter() {
           widget.categoriaNombre,
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -971,27 +996,27 @@ void _showPriceFilter() {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0, // Borde inferior
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
       body: Column(
         children: [
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           // Barra de búsqueda y botón de filtrar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0), // Ajusta el padding aquí
+            padding: EdgeInsets.symmetric(horizontal: 15.w), // Ajusta el padding aquí
             child: Row(
               children: [
                 Expanded(
                   child: Container(
-                    height: 40,
+                    height: 30.h,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(30.r),
                       border: Border.all(color: Color(0xFFE4E4E4)),
                     ),
                     child: TextField(
@@ -1007,12 +1032,12 @@ void _showPriceFilter() {
                         hintStyle: TextStyle(color: Color(0xFFB0B0B0)),
                         suffixIcon: Icon(Icons.search, color: Color(0xFF828282)), // Coloca el ícono a la derecha
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                        contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 30.w),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10.w),
                 IconButton(
                   icon: const Icon(Icons.filter_list, color: Color(0xFF828282)),
                   onPressed: _showPriceFilter, // Llamar al modal de filtrado
@@ -1020,12 +1045,12 @@ void _showPriceFilter() {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 3.h),
           Expanded(
             child: isLoading
                 ? Center(child: CircularProgressIndicator())
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    padding: EdgeInsets.symmetric(horizontal: 30.w),
                     child: GridView.builder(
                       itemCount: productosFiltrados.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -1043,6 +1068,7 @@ void _showPriceFilter() {
           ),
         ],
       ),
+    ),
     );
   }
 
@@ -1051,11 +1077,11 @@ void _showPriceFilter() {
     bool sinStock = producto['cantidad'] == 0; // Verificar si no hay stock
 
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 15.0),
+      margin: EdgeInsets.symmetric(horizontal: 1.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: const Color(0xFFE4E4E4)),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
@@ -1068,7 +1094,7 @@ void _showPriceFilter() {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 100,
+            height: 80.h,
             width: double.infinity,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
@@ -1079,20 +1105,19 @@ void _showPriceFilter() {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 40, // Ajustar la altura del contenedor de nombre
+                  height: 35.h, // Ajustar la altura del contenedor de nombre
                   child: Text(
                     producto['nombreProducto'],
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis, // Manejo de desbordamiento de texto
-                    style: TextStyle(fontWeight: FontWeight.normal),
+                    style: TextStyle(fontSize: 12.sp,fontWeight: FontWeight.normal),
                   ),
                 ),
-                const SizedBox(height: 3),
                 Text(
                   '\$${formatPrice(producto['precio'])}',
                   style: const TextStyle(
@@ -1100,10 +1125,10 @@ void _showPriceFilter() {
                     fontWeight: FontWeight.bold
                   ),
                 ),
-                const SizedBox(height: 7),
+                SizedBox(height: 7.h),
                 SizedBox(
                   width: double.infinity, // Ajustar el botón al ancho del contenedor
-                  height: 30, // Ajustar la altura del botón
+                  height: 25.h, // Ajustar la altura del botón
                   child: ElevatedButton(
                     onPressed: sinStock
                         ? null // Deshabilitar el botón si no hay stock
@@ -1114,14 +1139,14 @@ void _showPriceFilter() {
                       backgroundColor: sinStock ? null : Colors.red, // Sin fondo si no hay stock
                       side: BorderSide(color: Colors.red), // Borde rojo en cualquier estado
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(20.r),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      padding: EdgeInsets.symmetric(vertical: 5.h),
                     ),
                     child: Text(
                       sinStock ? 'Sin stock' : 'Añadir al carrito',
                       style: TextStyle(
-                        color: sinStock ? Colors.red : Colors.white, // Texto rojo si no hay stock, blanco si lo hay
+                        color: sinStock ? Colors.red : Colors.white, fontSize: 12.sp// Texto rojo si no hay stock, blanco si lo hay
                       ),
                     ),
                   ),

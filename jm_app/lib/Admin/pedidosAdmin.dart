@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
-
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const String baseUrl = 'https://distribucionesjm-app.onrender.com';
 
@@ -91,44 +92,59 @@ class _PedidosAdminState extends State<PedidosAdmin> {
     return filtrados;
   }
 
-  // Mostrar opciones de filtrado
-  void _showFilterOptions() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Container(
-          padding: EdgeInsets.all(30),
-          height: 300,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Filtrar por:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.red),
+void _showFilterOptions() {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return Container(
+        padding: EdgeInsets.all(20.w),
+        height: 230.h,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Filtrar por:',
+              style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.red,
               ),
-              const SizedBox(height: 30),
-              // Filtros de estado y fecha
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+            ),
+            SizedBox(height: 15.h),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Dropdown para estado
                 Flexible(
                   flex: 1,
                   child: DropdownButtonFormField<String>(
                     value: filtroEstado,
                     decoration: InputDecoration(
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red), // Línea de color rojo cuando no está enfocado
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                          width: 1.w,
+                        ),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Colors.red, width: 2.0), // Línea de color rojo cuando está enfocado
+                        borderSide: BorderSide(
+                          color: Colors.red,
+                          width: 2.w,
+                        ),
                       ),
                       labelText: 'Estado:',
-                      labelStyle: TextStyle(color: const Color.fromARGB(255, 94, 92, 92)), // Color de la etiqueta
+                      labelStyle: TextStyle(
+                        color: Color(0xFF5E5C5C),
+                        fontSize: 14.sp,
+                      ),
                     ),
                     items: ['en preparación', 'enviado', 'entregado']
                         .map((estado) => DropdownMenuItem<String>(
                               value: estado,
-                              child: Text(estado),
+                              child: Text(
+                                estado,
+                                style: TextStyle(fontSize: 14.sp),
+                              ),
                             ))
                         .toList(),
                     onChanged: (value) {
@@ -138,50 +154,69 @@ class _PedidosAdminState extends State<PedidosAdmin> {
                     },
                   ),
                 ),
-
-                  const SizedBox(width: 50),
-                  // Filtro de fecha
-                  Flexible(
-                    flex: 1,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        DateTime? selectedDate = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2030),
-                        );
-                        if (selectedDate != null) {
-                          setState(() {
-                            filtroFecha = selectedDate;
-                          });
-                        }
-                      },
-                      child: Text('Fecha', style: TextStyle(color: const Color.fromARGB(255, 94, 92, 92))),
+                SizedBox(width: 20.w),
+                // Botón de fecha
+                Flexible(
+                  flex: 1,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      DateTime? selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2030),
+                      );
+                      if (selectedDate != null) {
+                        setState(() {
+                          filtroFecha = selectedDate;
+                        });
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(vertical: 10.h),
+                      backgroundColor: Colors.grey[200],
+                    ),
+                    child: Text(
+                      'Fecha',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        color: Color(0xFF5E5C5C),
+                      ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 50),
-              // Botón para limpiar filtros
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    setState(() {
-                      filtroEstado = null;
-                      filtroFecha = null;
-                    });
-                    Navigator.pop(context); // Cerrar el modal
-                  },
-                  child: Text('Limpiar filtro', style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            ),
+            SizedBox(height: 40.h),
+            // Botón para limpiar filtros
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    filtroEstado = null;
+                    filtroFecha = null;
+                  });
+                  Navigator.pop(context); // Cerrar el modal
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 20.w),
+                  backgroundColor: Colors.red[50],
+                ),
+                child: Text(
+                  'Limpiar filtro',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    color: Colors.red,
+                  ),
                 ),
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
     // Función para obtener el detalle de un pedido específico
   Future<Map<String, dynamic>?> fetchDetallePedido(String pedidoId) async {
     try {
@@ -235,15 +270,16 @@ void cambiarEstado(int index, String nuevoEstado) {
   @override
   Widget build(BuildContext context) {
     List<Map<String, dynamic>> pedidosFiltrados = _filterPedidos();
-
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
+        title: Text(
           'Pedidos',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -252,17 +288,17 @@ void cambiarEstado(int index, String nuevoEstado) {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator()) // Mostrar indicador de carga
           : Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: EdgeInsets.all(16.w),
               child: Column(
                 children: [
                   // Barra de búsqueda y botón de filtro
@@ -271,10 +307,10 @@ void cambiarEstado(int index, String nuevoEstado) {
                       // Barra de búsqueda
                       Expanded(
                         child: Container(
-                          height: 40,
+                          height: 30.h,
                           decoration: BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(30.r),
                             border: Border.all(color: Color(0xFFE4E4E4)),
                           ),
                           child: TextField(
@@ -288,16 +324,16 @@ void cambiarEstado(int index, String nuevoEstado) {
                             keyboardType: TextInputType.text, 
                             decoration: InputDecoration(
                               hintText: 'Buscar pedido',
-                              hintStyle: TextStyle(color: Color(0xFFB0B0B0)),
-                              suffixIcon: Icon(Icons.search, color: Color(0xFF828282)),
+                              hintStyle: TextStyle(color: Color(0xFFB0B0B0), fontSize: 12.sp),
+                              suffixIcon: Icon(Icons.search, color: Color(0xFF828282), size: 18.w),
                               border: InputBorder.none,
                               contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 30),
+                                  vertical: 12.h, horizontal: 25.w),
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10.w),
                       // Botón de filtro
                       Row(
                         children: [
@@ -310,80 +346,91 @@ void cambiarEstado(int index, String nuevoEstado) {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: pedidosFiltrados.length,
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () async {
-                            final pedidoId = pedidosFiltrados[index]['_id'];
-                            final pedidoDetalle = await fetchDetallePedido(pedidoId); // Obtener el pedido
+                  SizedBox(height: 20.h),
+                 Expanded(
+                  child: ListView.builder(
+                    itemCount: pedidosFiltrados.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        onTap: () async {
+                          final pedidoId = pedidosFiltrados[index]['_id'];
+                          final pedidoDetalle = await fetchDetallePedido(pedidoId); // Obtener el pedido
 
-                            if (pedidoDetalle != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DetallePedido(pedido: pedidoDetalle),
-                                ),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Error al cargar detalles del pedido.')),
-                              );
-                            }
-                          },
-                          child: Card(
-                            elevation: 3,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            color: Color.fromARGB(255, 252, 251, 251),
-                            child: ListTile(
-                              leading: CircleAvatar(
-                                backgroundColor: pedidosFiltrados[index]['estado'] == 'entregado'
-                                    ? Colors.green
+                          if (pedidoDetalle != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetallePedido(pedido: pedidoDetalle),
+                              ),
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Error al cargar detalles del pedido.')),
+                            );
+                          }
+                        },
+                        child: Card(
+                          elevation: 3,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.r),
+                          ),
+                          color: const Color.fromARGB(255, 252, 251, 251),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              radius: 20.r,
+                              backgroundColor: pedidosFiltrados[index]['estado'] == 'entregado'
+                                  ? Colors.green
+                                  : pedidosFiltrados[index]['estado'] == 'enviado'
+                                      ? Colors.orange
+                                      : Colors.red,
+                              child: Icon(
+                                pedidosFiltrados[index]['estado'] == 'entregado'
+                                    ? Icons.check
                                     : pedidosFiltrados[index]['estado'] == 'enviado'
-                                        ? Colors.orange
-                                        : Colors.red,
-                                child: Icon(
-                                  pedidosFiltrados[index]['estado'] == 'entregado'
-                                      ? Icons.check
-                                      : pedidosFiltrados[index]['estado'] == 'enviado'
-                                          ? Icons.local_shipping
-                                          : Icons.pending,
-                                  color: Colors.white,
-                                ),
+                                        ? Icons.local_shipping
+                                        : Icons.pending,
+                                color: Colors.white,
+                                size: 20.sp,
                               ),
-                              title: Text(
-                                  "Pedido #${pedidosFiltrados[index]['_id']} - ${pedidosFiltrados[index]['cliente']}"),
-                              subtitle: Text(
-                                  "Fecha: ${pedidosFiltrados[index]['fecha']} - Estado: ${pedidosFiltrados[index]['estado']}"),
-                              trailing: PopupMenuButton<String>(
-                                onSelected: (nuevoEstado) {
-                                  // Cambiar el estado localmente y en la base de datos
-                                  cambiarEstado(index, nuevoEstado);  // Llamar a la función que actualiza el estado
-                                },
-                                itemBuilder: (BuildContext context) {
-                                  return ['en preparación', 'enviado', 'entregado']
-                                      .map((String estado) {
-                                    return PopupMenuItem<String>(
-                                      value: estado,
-                                      child: Text(estado),
-                                    );
-                                  }).toList();
-                                },
-                                child: Icon(Icons.more_vert),
-                              ),
+                            ),
+                            title: Text(
+                              "Pedido #${pedidosFiltrados[index]['_id']} - ${pedidosFiltrados[index]['cliente']}",
+                              style: TextStyle(fontSize: 14.sp),
+                            ),
+                            subtitle: Text(
+                              "Fecha: ${pedidosFiltrados[index]['fecha']} - Estado: ${pedidosFiltrados[index]['estado']}",
+                              style: TextStyle(fontSize: 12.sp),
+                            ),
+                            trailing: PopupMenuButton<String>(
+                              onSelected: (nuevoEstado) {
+                                // Cambiar el estado localmente y en la base de datos
+                                cambiarEstado(index, nuevoEstado); // Llamar a la función que actualiza el estado
+                              },
+                              itemBuilder: (BuildContext context) {
+                                return ['en preparación', 'enviado', 'entregado']
+                                    .map((String estado) {
+                                  return PopupMenuItem<String>(
+                                    value: estado,
+                                    child: Text(
+                                      estado,
+                                      style: TextStyle(fontSize: 12.sp),
+                                    ),
+                                  );
+                                }).toList();
+                              },
+                              child: Icon(Icons.more_vert, size: 20.sp),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
+                      );
+                    },
                   ),
+                ),
+
                 ],
               ),
-            ),
+          ),      
+          ),
     );
   }
 }
@@ -408,7 +455,9 @@ class DetallePedido extends StatelessWidget {
     });
     int total = totalPagado;
 
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
@@ -417,11 +466,11 @@ class DetallePedido extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Detalle del Pedido',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -430,10 +479,10 @@ class DetallePedido extends StatelessWidget {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
@@ -447,38 +496,38 @@ class DetallePedido extends StatelessWidget {
             Text(
               'Pedido #${pedido['_id']}',
               style: TextStyle(
-                fontSize: 18,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Text(
               'Cliente: ${pedido['nombreCliente']}',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 14.sp),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Text(
               'Fecha: ${pedido['fechaCompra'].toString().substring(0, 10)}',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 14.sp),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Text(
               'Dirección: ${pedido['direccion']}',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 14.sp),
             ),
               
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             // Productos comprados
             Text(
               'Productos Comprados',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             Expanded(
               child: ListView.builder(
                 itemCount: productos.length,
@@ -496,14 +545,14 @@ class DetallePedido extends StatelessWidget {
                           // Aquí suponemos que tienes una URL de imagen, si no, ajusta
                           Image.network(
                             productos[index]['imgUrl'],  // Asegúrate de que imgUrl sea la clave correcta
-                            width: 50,
-                            height: 50,
+                            width: 50.w,
+                            height: 50.h,
                             fit: BoxFit.cover,
                             errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
-                              return Icon(Icons.broken_image, size: 50);  // Mostrar un ícono si hay un error al cargar la imagen
+                              return Icon(Icons.broken_image, size: 50.w);  // Mostrar un ícono si hay un error al cargar la imagen
                             },
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: 10.w),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -511,19 +560,19 @@ class DetallePedido extends StatelessWidget {
                                 Text(
                                   producto['nombre'],
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14.sp,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 5),
+                                SizedBox(height: 5.h),
                                 Text(
                                   'Cantidad: ${producto['cantidad']}',
-                                  style: TextStyle(fontSize: 14),
+                                  style: TextStyle(fontSize: 14.sp),
                                 ),
-                                const SizedBox(height: 5),
+                                SizedBox(height: 5.h),
                                 Text(
                                   'Precio: \$${formatPrice(producto['precio'])}',
-                                  style: TextStyle(fontSize: 14),
+                                  style: TextStyle(fontSize: 14.sp),
                                 ),
                               ],
                             ),
@@ -534,7 +583,7 @@ class DetallePedido extends StatelessWidget {
                               Text(
                                 'Subtotal:',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.red,
                                 ),
@@ -542,7 +591,7 @@ class DetallePedido extends StatelessWidget {
                               Text(
                                 '\$${formatPrice(producto['subtotal'])}',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14.sp,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
@@ -556,9 +605,9 @@ class DetallePedido extends StatelessWidget {
                 },
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             Divider(),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -569,16 +618,16 @@ class DetallePedido extends StatelessWidget {
                       Text(
                         'Total:',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.red,
                         ),
                       ),
-                      const SizedBox(width: 10),
+                      SizedBox(width: 10.w),
                       Text(
                         '\$${formatPrice(total)}',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16.sp,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -591,6 +640,7 @@ class DetallePedido extends StatelessWidget {
           ],
         ),
       ),
+    ),
     );
   }
 }

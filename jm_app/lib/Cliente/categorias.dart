@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 const String baseUrl = 'https://distribucionesjm-app.onrender.com';
 
@@ -400,7 +401,9 @@ void _applyPriceFilter() {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Color(0xFF828282)),
@@ -412,7 +415,7 @@ void _applyPriceFilter() {
           widget.subcategoriaNombre,
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -421,10 +424,10 @@ void _applyPriceFilter() {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0, // Borde inferior
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
@@ -433,15 +436,15 @@ void _applyPriceFilter() {
           const SizedBox(height: 16),
           // Barra de búsqueda y botón de filtrar
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0), // Ajusta el padding aquí
+            padding: EdgeInsets.symmetric(horizontal: 15.w), // Ajusta el padding aquí
             child: Row(
               children: [
                 Expanded(
                   child: Container(
-                    height: 40,
+                    height: 30.h,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(30.r),
                       border: Border.all(color: Color(0xFFE4E4E4)),
                     ),
                     child: TextField(
@@ -457,12 +460,12 @@ void _applyPriceFilter() {
                         hintStyle: TextStyle(color: Color(0xFFB0B0B0)),
                         suffixIcon: Icon(Icons.search, color: Color(0xFF828282)), // Coloca el ícono a la derecha
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                        contentPadding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 30.w),
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                SizedBox(width: 10.w),
                 IconButton(
                   icon: const Icon(Icons.filter_list, color: Color(0xFF828282)),
                   onPressed: _showPriceFilter, // Llamar al modal de filtrado
@@ -470,12 +473,12 @@ void _applyPriceFilter() {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: 16.h),
           Expanded(
             child: isLoading
                 ? Center(child: CircularProgressIndicator())
                 : Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30.0),
+                    padding: EdgeInsets.symmetric(horizontal: 30.h),
                     child: GridView.builder(
                       itemCount: productosFiltrados.length,
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -493,6 +496,7 @@ void _applyPriceFilter() {
           ),
         ],
       ),
+    ),
     );
   }
 
@@ -515,12 +519,11 @@ Widget _buildProductCard(Map<String, dynamic> producto) {
       );
     },
     child: Container(
-      width: 160, // Ajusta el ancho para cartas más grandes
-      margin: const EdgeInsets.symmetric(horizontal: 7.0, vertical: 15.0),
+      margin: EdgeInsets.symmetric(horizontal: 1.h, vertical: 1.w),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border.all(color: const Color(0xFFE4E4E4)),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
@@ -533,10 +536,10 @@ Widget _buildProductCard(Map<String, dynamic> producto) {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            height: 100,
+            height: 80.h,
             width: double.infinity,
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
               image: DecorationImage(
                 image: NetworkImage(producto['imgUrl']),
                 fit: BoxFit.cover,
@@ -544,20 +547,19 @@ Widget _buildProductCard(Map<String, dynamic> producto) {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: 35, // Ajustamos la altura para que todos los nombres ocupen el mismo espacio
+                  height: 40.h, // Ajustamos la altura para que todos los nombres ocupen el mismo espacio
                   child: Text(
                     producto['nombreProducto'],
-                    style: const TextStyle(fontWeight: FontWeight.normal),
+                    style: TextStyle(fontSize: 12.sp,fontWeight: FontWeight.normal),
                     maxLines: 2, // Limitar a dos líneas
                     overflow: TextOverflow.ellipsis, // Si el texto es muy largo, usar puntos suspensivos
                   ),
                 ),
-                const SizedBox(height: 12),
                 Text(
                   '\$${formatPrice(producto['precio'])}',
                   style: const TextStyle(
@@ -565,10 +567,10 @@ Widget _buildProductCard(Map<String, dynamic> producto) {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 9),
+                SizedBox(height: 7.h),
                 SizedBox(
                   width: double.infinity, // Asegura que el botón ocupe todo el ancho disponible
-                  height: 30, // Ajusta la altura del botón
+                  height: 25.h, // Ajusta la altura del botón
                   child: ElevatedButton(
                     onPressed: sinStock
                         ? null // Deshabilita el botón si no hay stock
@@ -580,15 +582,15 @@ Widget _buildProductCard(Map<String, dynamic> producto) {
                       backgroundColor: sinStock ? Colors.white : Colors.red, // Fondo blanco si no hay stock
                       side: BorderSide(color: Colors.red), // Borde rojo
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(20.r),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      padding: EdgeInsets.symmetric(vertical: 5.h),
                     ),
                     child: Text(
                       sinStock ? 'Sin stock' : 'Añadir al carrito', // Texto cambia según disponibilidad
                       style: TextStyle(
                         color: sinStock ? Colors.red : Colors.white, // Texto rojo si no hay stock, blanco si lo hay
-                        fontSize: 12, // Ajustar tamaño de fuente si es necesario
+                        fontSize: 12.sp, // Ajustar tamaño de fuente si es necesario
                       ),
                     ),
                   ),

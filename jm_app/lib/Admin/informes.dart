@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart'; // Necesario para el formato de fechas
-import 'package:intl/intl.dart';
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Necesario para el formato de fechas
+import 'package:flutter_screenutil/flutter_screenutil.dart'; 
 
 
 const String baseUrl = 'https://distribucionesjm-app.onrender.com';
@@ -22,14 +20,16 @@ class _InformesState extends State<Informes> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text(
+        title: Text(
           'Informes',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -38,17 +38,17 @@ class _InformesState extends State<Informes> {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
       body: Column(
         children: [
           _buildDateRangePicker(),
-          const SizedBox(height: 10),
+
           Flexible(
             child: _buildInformeCard(
               title: 'Ventas Totales',
@@ -67,7 +67,7 @@ class _InformesState extends State<Informes> {
               },
             ),
           ),
-          const SizedBox(height: 10),
+
           Flexible(
             child: _buildInformeCard(
               title: 'Productos Más Vendidos',
@@ -86,7 +86,7 @@ class _InformesState extends State<Informes> {
               },
             ),
           ),
-          const SizedBox(height: 10),
+
           Flexible(
             child: _buildInformeCard(
               title: 'Clientes Activos',
@@ -105,16 +105,17 @@ class _InformesState extends State<Informes> {
               },
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: 20.h),
         ],
       ),
+    ),
     );
   }
 
   // Widget para el rango de fechas
   Widget _buildDateRangePicker() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(16.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -122,19 +123,20 @@ class _InformesState extends State<Informes> {
             fechaInicio != null && fechaFin != null
                 ? 'Desde: ${DateFormat('dd/MM/yyyy').format(fechaInicio!)}\nHasta: ${DateFormat('dd/MM/yyyy').format(fechaFin!)}'
                 : 'Seleccione un rango de fechas',
-            style: TextStyle(fontSize: 14, color: Colors.black87),
+            style: TextStyle(fontSize: 12.sp, color: Colors.black87),
           ),
           ElevatedButton(
             onPressed: _selectDateRange,
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: Text('Seleccionar Fechas', style: TextStyle(color: Colors.white)),
-
+            child: Text(
+              'Seleccionar Fecha',
+              style: TextStyle(color: Colors.white, fontSize: 12.sp),
+            ),
           ),
         ],
       ),
     );
   }
-
 // Función para abrir el selector de rango de fechas con color personalizado
 Future<void> _selectDateRange() async {
   DateTimeRange? picked = await showDateRangePicker(
@@ -179,27 +181,27 @@ Widget _buildInformeCard({
 }) {
   return Center(
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0), // Ajusta el espacio entre las cartas
+      padding: EdgeInsets.symmetric(vertical: 9.h), // Espaciado responsivo entre las tarjetas
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.85, // Ancho de las tarjetas
-        height: 120, // Ajuste de altura
+        width: 0.85.sw, // Ancho responsivo de las tarjetas
+        height: 100.h, // Altura responsiva
         child: Card(
-          elevation: 3, // Reduce un poco la sombra para un aspecto más sutil
+          elevation: 3, // Sombra para la tarjeta
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(12.r), // Esquinas redondeadas responsivas
           ),
           child: InkWell(
             onTap: onPressed,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // Reduce el padding interno
+              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h), // Padding interno responsivo
               child: Row(
                 children: [
                   CircleAvatar(
                     backgroundColor: Colors.redAccent,
-                    child: Icon(icon, color: Colors.white),
-                    radius: 30,
+                    child: Icon(icon, color: Colors.white, size: 24.w), // Ícono responsivo
+                    radius: 25.w, // Radio responsivo
                   ),
-                  const SizedBox(width: 16), // Espacio entre el icono y los textos
+                  SizedBox(width: 16.w), // Espaciado responsivo entre el ícono y los textos
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -208,15 +210,18 @@ Widget _buildInformeCard({
                         Text(
                           title,
                           style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 14.sp, // Fuente responsiva
                             fontWeight: FontWeight.bold,
                             color: Colors.red,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8.h), // Espaciado responsivo entre los textos
                         Text(
                           description,
-                          style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+                          style: TextStyle(
+                            fontSize: 12.sp, // Fuente responsiva
+                            color: Colors.grey[600],
+                          ),
                         ),
                       ],
                     ),
@@ -293,7 +298,9 @@ class _InformeVentasTotalesState extends State<InformeVentasTotales> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Color(0xFF828282)),
@@ -301,11 +308,11 @@ class _InformeVentasTotalesState extends State<InformeVentasTotales> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Ventas Totales',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -313,10 +320,10 @@ class _InformeVentasTotalesState extends State<InformeVentasTotales> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
@@ -329,19 +336,19 @@ class _InformeVentasTotalesState extends State<InformeVentasTotales> {
                 children: [
                   Text(
                     'Total de Ventas:',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
+                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.red),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Text(
                     '\$${formatPrice(totalVentas)}',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h),
                   Text(
                     'Historial de ventas',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.red),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Expanded(
                     child: ListView.builder(
                       itemCount: historialVentas.length,
@@ -350,21 +357,47 @@ class _InformeVentasTotalesState extends State<InformeVentasTotales> {
                         final fechaVenta = venta['fechaCompra']; // Asegúrate de que el backend envíe este campo
                         final totalVenta = venta['total']; // Asegúrate de que el backend envíe este campo
 
-                        return ListTile(
-                          title: Text('Venta #${index + 1}'),
-                          subtitle: Text('Fecha: $fechaVenta'),
-                          trailing: Text(
-                            '\$${formatPrice(totalVenta)}',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.green),
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w), // Espaciado responsivo
+                          child: ListTile(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 12.w), // Padding interno responsivo
+                            tileColor: Colors.grey[100], // Color de fondo para mayor legibilidad
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.r), // Bordes redondeados responsivos
+                            ),
+                            title: Text(
+                              'Venta #${index + 1}',
+                              style: TextStyle(
+                                fontSize: 14.sp, // Fuente responsiva
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            subtitle: Text(
+                              'Fecha: $fechaVenta',
+                              style: TextStyle(
+                                fontSize: 12.sp, // Fuente responsiva
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            trailing: Text(
+                              '\$${formatPrice(totalVenta)}',
+                              style: TextStyle(
+                                fontSize: 14.sp, // Fuente responsiva
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
                           ),
                         );
                       },
                     ),
                   ),
 
+
                 ],
               ),
       ),
+    ),
     );
   }
 }
@@ -428,7 +461,9 @@ class _InformeProductosMasVendidosState extends State<InformeProductosMasVendido
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Color(0xFF828282)),
@@ -436,11 +471,11 @@ class _InformeProductosMasVendidosState extends State<InformeProductosMasVendido
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Productos Más Vendidos',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -448,37 +483,60 @@ class _InformeProductosMasVendidosState extends State<InformeProductosMasVendido
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(30.0),
+        padding: EdgeInsets.all(20.w), // Padding responsivo
         child: isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(
+                child: CircularProgressIndicator(
+                  strokeWidth: 3.w, // Hacer el indicador de carga responsivo
+                ),
+              )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     'Ranking de Productos',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
+                    style: TextStyle(
+                      fontSize: 16.sp, // Fuente responsiva
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red,
+                    ),
                   ),
-                  const SizedBox(height: 20),
+                  SizedBox(height: 20.h), // Espaciado responsivo
                   Expanded(
                     child: productosMasVendidos.isEmpty
-                        ? Text('No se encontraron productos más vendidos.')
+                        ? Text(
+                            'No se encontraron productos más vendidos.',
+                            style: TextStyle(fontSize: 14.sp, color: Colors.grey), // Fuente responsiva
+                          )
                         : ListView.builder(
                             itemCount: productosMasVendidos.length,
                             itemBuilder: (context, index) {
                               final producto = productosMasVendidos[index];
-                              return Card(
-                                elevation: 4,
-                                child: ListTile(
-                                  title: Text(producto['nombreProducto']),
-                                  subtitle: Text('${formatPrice(producto['totalVendido'])} unidades vendidas'),
+                              return Padding(
+                                padding: EdgeInsets.symmetric(vertical: 2.h), // Espaciado entre tarjetas
+                                child: Card(
+                                  elevation: 4,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10.r), // Bordes redondeados responsivos
+                                  ),
+                                  child: ListTile(
+                                    title: Text(
+                                      producto['nombreProducto'],
+                                      style: TextStyle(fontSize: 14.sp), // Fuente responsiva
+                                    ),
+                                    subtitle: Text(
+                                      '${formatPrice(producto['totalVendido'])} unidades vendidas',
+                                      style: TextStyle(fontSize: 12.sp, color: Colors.grey[600]), // Fuente responsiva
+                                    ),
+                                  ),
                                 ),
                               );
                             },
@@ -486,10 +544,11 @@ class _InformeProductosMasVendidosState extends State<InformeProductosMasVendido
                   ),
                 ],
               ),
-      ),
-    );
-  }
-}
+          ),
+          ),
+        );
+        }
+      }
 // Para formatear las fechas
 
 class InformeClientesActivos extends StatefulWidget {
@@ -550,7 +609,9 @@ class _InformeClientesActivosState extends State<InformeClientesActivos> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+  return ScreenUtilInit(
+    designSize: const Size(360, 690),
+    builder: (context, child) => Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: Color(0xFF828282)),
@@ -558,11 +619,11 @@ class _InformeClientesActivosState extends State<InformeClientesActivos> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text(
+        title: Text(
           'Clientes Activos',
           style: TextStyle(
             color: Color(0xFFEC2020),
-            fontSize: 16,
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -570,10 +631,10 @@ class _InformeClientesActivosState extends State<InformeClientesActivos> {
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(1.0),
+          preferredSize: Size.fromHeight(1.h),
           child: Container(
             color: Color(0xFFDFDDDD),
-            height: 1.0,
+            height: 1.h,
           ),
         ),
       ),
@@ -586,46 +647,60 @@ class _InformeClientesActivosState extends State<InformeClientesActivos> {
                 children: [
                   Text(
                     'Clientes Totales:',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
+                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.red),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Text(
                     '$totalClientes',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   const SizedBox(height: 20),
                   Text(
                     'Clientes Activos:',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.red),
+                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.red),
                   ),
-                  const SizedBox(height: 10),
+                  SizedBox(height: 10.h),
                   Text(
                     '$clientesActivos',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+                    style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: Colors.black87),
                   ),
                   const SizedBox(height: 20),
                   Text(
                     'Lista de Clientes Activos',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.red),
                   ),
-                  const SizedBox(height: 10),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: listaClientes.length,
-                      itemBuilder: (context, index) {
-                        print(listaClientes);
-                        final cliente = listaClientes[index];
-                        return ListTile(
-                          title: Text(cliente['nombres'] ?? 'Cliente sin nombre'),
-                          subtitle: Text('Email: ${cliente['email'] ?? 'Sin email'}'),
-                          trailing: Icon(Icons.check_circle, color: Colors.green),
-                        );
-                      },
+                  
+            Expanded(
+              child: ListView.builder(
+                itemCount: listaClientes.length,
+                itemBuilder: (context, index) {
+                  final cliente = listaClientes[index];
+                  return Padding(
+                    padding: EdgeInsets.symmetric(vertical: 8.h), // Espaciado entre elementos
+                    child: ListTile(
+                      contentPadding: EdgeInsets.symmetric(horizontal: 16.w), // Padding interno responsivo
+                      title: Text(
+                        cliente['nombres'] ?? 'Cliente sin nombre',
+                        style: TextStyle(fontSize: 14.sp), // Fuente responsiva
+                      ),
+                      subtitle: Text(
+                        'Email: ${cliente['email'] ?? 'Sin email'}',
+                        style: TextStyle(fontSize: 12.sp, color: Colors.grey[600]), // Fuente responsiva
+                      ),
+                      trailing: Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 20.w, // Ícono responsivo
+                      ),
                     ),
-                  ),
+                  );
+                },
+              ),
+            ),
                 ],
               ),
       ),
+    ),
     );
   }
 }
